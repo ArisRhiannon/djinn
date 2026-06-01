@@ -4340,7 +4340,7 @@ class ToolExecutor:
                 style    = act.get("style", "blurple")
                 cust_id  = act.get("custom_id", f"fairy_btn_{i}_{int(time.time())}")
                 emoji    = act.get("emoji", "")
-                view.add_item(_FairyButton(label=label, style=style, custom_id=cust_id, emoji=emoji))
+                view.add_item(self._FairyButton(label=label, style=style, custom_id=cust_id, emoji=emoji))
             msg = await ch.send(content=content or "Selecciona una opción:", view=view)
             return {"success": True, "message_id": str(msg.id), "component_type": "buttons",
                     "active_minutes": timeout // 60, "buttons": len(actions)}

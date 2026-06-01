@@ -34,7 +34,6 @@ extend-exclude = [
     "models",
     "logs",
     "deprecated",
-    "scripts/kadath_*",  # contenido narrativo del juego
     ".code-review",
     "tests/test_torneo_integration.py",  # legacy, mucho mock — revisar aparte
 ]
@@ -95,7 +94,6 @@ exclude = [
     "venv/",
     "models/",
     "deprecated/",
-    "scripts/kadath_",
     "logs/",
 ]
 
@@ -121,7 +119,6 @@ module = [
     "utils.llm_client",
     "utils.database",
     "utils.orchestrator",
-    "utils.kadath_gamestate",
     "utils.zzz_card_renderer",
 ]
 disable_error_code = [

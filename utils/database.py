@@ -473,7 +473,6 @@ _GUILD_CONFIG_COLUMNS = frozenset({
     "audit_ch", "welcome_ch", "welcome_msg", "autorole_id", "automod_on",
     "tts_role", "log_actions", "herta_role_id", "herta_webhook_url",
     "moroso_ch", "moroso_role_id",
-    "zzz_calendar_ch", "zzz_calendar_msg_id",
     "birthday_ch", "mod_channel"
 })
 
@@ -2385,17 +2384,17 @@ class Database:
     async def get_token_usage(self, guild_id: int, user_id: int = None, days: int = 7) -> list:
         cutoff = (__import__("datetime").date.today() - __import__("datetime").timedelta(days=days)).isoformat()
         if user_id:
-            rows = await self.fetchall(
+            rows = await self.fetch(
                 "SELECT * FROM token_usage WHERE guild_id=? AND user_id=? AND date>=? ORDER BY date DESC",
                 (guild_id, user_id, cutoff),
             )
         else:
-            rows = await self.fetchall(
+            rows = await self.fetch(
                 "SELECT date, SUM(tokens_in) as tokens_in, SUM(tokens_out) as tokens_out, SUM(calls) as calls "
                 "FROM token_usage WHERE guild_id=? AND date>=? GROUP BY date ORDER BY date DESC",
                 (guild_id, cutoff),
             )
-        return [dict(r) for r in rows]
+        return rows
 
     # ── Loans (Youkai Financial Services™) ─────────────────────────────────
 
@@ -3405,7 +3404,7 @@ class Database:
             )
             await self._safe_commit()
 
-    async def bulk_save_persisted_roles(self, guild_id: int, data: List[Tuple[int, List[int]]]) -> None:
+    async def bulk_save_persisted_roles(self, guild_id: int, data: List[tuple[int, List[int]]]) -> None:
         """Save persisted roles for multiple members in a single transaction."""
         import datetime
         now_iso = datetime.datetime.now(datetime.timezone.utc).isoformat()

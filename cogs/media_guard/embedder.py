@@ -120,7 +120,7 @@ class Embedder:
             image = image.convert("RGB")
 
         # Resize to 224x224
-        image = image.resize((INPUT_SIZE, INPUT_SIZE), Image.BILINEAR)
+        image = image.resize((INPUT_SIZE, INPUT_SIZE), Image.Resampling.BILINEAR)
 
         # Convert to numpy array (HWC, 0-255)
         arr = np.asarray(image, dtype=np.float32) / 255.0

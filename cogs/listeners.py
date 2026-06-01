@@ -479,7 +479,7 @@ class ActionDispatcher:
                 continue
             try:
                 await self._run_action(
-                    action, atype, message, member, executor, uid, cid, mid
+                    action, atype, message, member, executor, uid, cid, mid, match
                 )
             except Exception as exc:
                 logger.error("ActionDispatcher: error en acción '{}': {}", atype, exc)
@@ -494,6 +494,7 @@ class ActionDispatcher:
         uid: str,
         cid: str,
         mid: str,
+        match: ListenerMatch,
     ) -> None:
 
         if atype == "reply_text":

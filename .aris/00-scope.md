@@ -1,30 +1,22 @@
-# Validation Scope: Djinn Discord Agentic Bot (Audit Update - June 2026)
+# Aris Scope — Djinn Discord Agentic Bot
 
-## 1. Target & Context
-- **Target Repository**: `/home/ubuntu/projects/djinn`
-- **Application**: Djinn (Fairy/Youkai Bot) — An agentic Discord bot inspired by Zenless Zone Zero.
-- **Primary Languages**: Python 3.11+
-- **Conventions**:
-  - Code identifiers in **English**.
-  - Comments, documentation, and user-facing UI in **Spanish**.
-  - Centralized DB interaction via `self.bot.db` (`utils/database.py`).
-  - Loguru-based logger with daily rotation under `logs/`.
+**Date**: 2026-06-01  
+**Reviewer**: Aris Validator  
+**Role**: code-reviewer  
+**Base commit**: ebe2e1d  
+**Head commit**: 3a360f1  
 
-## 2. Tech Stack Summary
-- **Framework**: `discord.py` >= 2.4.0 (using 2.7.0 features)
-- **Database**: SQLite (via `aiosqlite` + WAL mode)
-- **AI/LLM Providers**:
-  - Google AI Studio (using `google-genai` SDK) [Default Core Agentic Engine]
-  - DeepSeek v4 (via custom HTTP client)
-  - OpenRouter API
-- **Embeddings & Vector Backend**: ChromaDB (`ChromaMemory` wrapper) for semantic search
-- **Vision & Guards**: `onnxruntime` (`mobilenetv3_small` for `cogs/media_guard/`)
-- **TTS**: `Piper` (external binary wrapper, currently disabled/commented out)
-- **Moderation Engine**: `goodfaith` package (integrated)
+## Project
+Python 3.11 Discord bot. ~47k lines deleted in cleanup. Key files reviewed:
+- main.py, config.py
+- utils/llm_client.py, utils/orchestrator.py, utils/discord_tools.py
+- utils/tools/_declarations.py, utils/database.py
+- utils/security.py, utils/api_server.py, utils/circuit_breaker.py
+- cogs/automod_v3.py, cogs/nlp_handler.py, cogs/media_guard/
+- tests/ (21 test files)
 
-## 3. Scope of Validation
-- **Latest Fixes Under Review**:
-  - Integration of `CircuitBreaker` utility in `utils/llm_client.py` inside `_retry_api_call`.
-  - Deletion/deprecation of the stale `sqlite-vec` vector pipeline and centralizing search around **ChromaDB**.
-  - Realignment of `ARCHITECTURE.md` (correcting GGUF local model active status, mapping active databases, and documenting vector purging stubs).
-  - Validation of the test suite execution status using the `/home/ubuntu/youkai/venv` virtual environment interpreter.
+## Stack
+Python 3.11, discord.py, aiosqlite (WAL), ChromaDB, google-genai, openai SDK, goodfaith, aiohttp, loguru
+
+## Pillars
+SLOP · CLAIMS · QUALITY
