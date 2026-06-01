@@ -107,6 +107,22 @@ graph TD
 - Tool execution logic is mapped to private methods in `utils/discord_tools.py` matching the naming pattern `_do_<tool_name>`.
 - An automated integrity contract test (`tests/test_discord_tools_contract.py`) runs on every commit, verifying a bidirectional 1-to-1 match between model declarations and executable tool handlers.
 
+## 🧰 Capabilities & Tool Registry (137 Tools)
+
+Djinn exposes exactly **137 capabilities** to the LLM via its internal tool registry, allowing the agent to interact dynamically with the Discord server. These are broadly categorized into:
+
+### 🌟 Core & Important Tools
+- **Moderation & Automod:** `ban_user`, `kick_user`, `mute_user`, `mass_timeout`, `warn_user`, `antiraid_scan`, `seal_user` (Isolate users instantly).
+- **Economy & Treasury (Loan Shark):** `get_user_credits`, `grant_credits`, `remove_credits`, `create_loan`, `pay_loan`, `check_guild_pool`.
+- **System & Analysis:** `search_messages` (Semantic Vector RAG search), `read_audit_log`, `analyze_image` (MediaGuard), `check_domain_safety`.
+- **Channel Management:** `lock_channel`, `unlock_channel`, `slowmode`, `purge_messages`.
+
+### ⚙️ Utility & Minor Tools
+- **Configuration:** `set_welcome_channel`, `set_automod_status`, `set_tts_role`.
+- **Roles & Identity:** `add_role`, `remove_role`, `rename_user`, `get_avatar`.
+- **Fun & Social:** `send_tts`, `curse_user`, `mouthwash_user`, `create_poll`.
+- **Internal APIs:** `get_metrics`, `read_logs`, `override_channel`.
+
 ---
 
 ## ⚙️ Configuration & Quick Start
