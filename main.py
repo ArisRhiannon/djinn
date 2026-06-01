@@ -280,7 +280,6 @@ OPTIONAL_COGS: list[str] = [
     "cogs.birthdays",
     "cogs.recompensas",
     "cogs.music",
-    "cogs.zzz_calendar",
     "cogs.treasury",  # D J I N N · B A N K: pool del servidor + /banco commands.
     "cogs.aware",
     "cogs.db_maintenance",  # Wave 3 (F1.2 backup + F2.2 VACUUM): mantenimiento periódico de la DB.
