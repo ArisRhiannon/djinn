@@ -126,7 +126,12 @@ graph TD
 
 ## 🧰 Capabilities & Tool Registry (137 Tools)
 
-Djinn exposes exactly **137 capabilities** to the LLM via its internal tool registry, allowing the agent to interact dynamically with the Discord server. These are broadly categorized into:
+While Djinn has a total of **137 capabilities** registered in its backend, it **does not expose all of them at once**. Instead, Djinn utilizes a **Semantic Tool Orchestrator** that dynamically filters and injects only the strictly relevant tools into the LLM's prompt based on the user's intent.
+
+### 📉 Zero-Waste Context & Token Economy
+Injecting 130+ JSON schemas into an LLM request would severely degrade reasoning capabilities, increase latency, and bloat token costs. Djinn solves this by contextually loading tools on the fly. For instance, if a user talks about debts, Djinn only loads the Economy tools; if a user reports a spammer, it only loads the Moderation tools. This approach drastically **saves tokens, reduces context size, and eliminates tool hallucination**.
+
+The capabilities in the registry are broadly categorized into:
 
 ### 🌟 Core & Important Tools
 - **Moderation & Automod:** `ban_user`, `kick_user`, `mute_user`, `mass_timeout`, `warn_user`, `antiraid_scan`, `seal_user` (Isolate users instantly).
