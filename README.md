@@ -35,6 +35,15 @@ Djinn's LLM engine parses the intent, queries its domain **Skills** (injected `.
 
 By dynamically bridging **137 tools**, Djinn essentially automates the entire workflow of a dedicated human moderator, bringing unprecedented fluidity to server administration.
 
+### 🔮 Highlighted Capability: The `seal_user` Quarantine Protocol
+Unlike standard bots that just apply a simple mute or timeout, Djinn features an advanced quarantine system via the `seal_user` tool. When an admin asks Djinn to *"isolate"* or *"quarantine"* a problematic user, Djinn autonomously:
+1. Strips all current active roles from the user (backing them up securely).
+2. Applies a specialized "Sealed" role to restrict them globally.
+3. Automatically opens a private, isolated interrogation channel exclusive to the user and the moderators.
+4. Schedules a background task to automatically restore their original roles and delete the interrogation channel once the sentence expires.
+
+This effectively provides a state-of-the-art "jail" system, executed flawlessly from a single natural language request.
+
 ---
 
 ## 🛠️ Technology Stack
