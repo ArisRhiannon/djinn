@@ -262,10 +262,8 @@ OPTIONAL_COGS: list[str] = [
     "cogs.moderation",
     "cogs.automod_v3",  # Automod PRIMARIO (motor 0-FP). Reemplaza a automod_v2 (deprecated).
     "cogs.info",
-    "cogs.destilacion",
     "cogs.listeners",
     "cogs.torneo",
-    "cogs.xoft",
     "cogs.model_switcher",
     "cogs.dream_quest",
     "cogs.media_guard",
