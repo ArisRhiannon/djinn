@@ -1,209 +1,209 @@
 # Djinn — Discord Agentic Bot
 
-Djinn es un bot agéntico para Discord inspirado en el concepto de IA de *Zenless Zone Zero*. Funciona sobre un motor de toma de decisiones multi-modelo con soporte nativo para tool calling que interactúa directamente sobre el servidor mediante 137 herramientas registradas.
+Djinn is an autonomous, agentic Discord bot inspired by the AI concept from *Zenless Zone Zero*. It operates on a multi-model decision engine with native tool calling support, interacting with Discord servers through 137 registered capabilities.
 
-El sistema implementa persistencia híbrida (SQLite en modo WAL + ChromaDB para memoria semántica), moderación automatizada basada en contratos de confianza (Goodfaith), análisis perceptual de contenido multimedia (MediaGuard), APIs HTTP internas de administración y un subsistema de rol narrativo estructurado (Kadath).
+The system utilizes a hybrid persistence model (SQLite in WAL mode for transactional data and ChromaDB for semantic memory), trust-first automated moderation (Goodfaith), perceptual multimedia content analysis (MediaGuard), internal administration APIs, and a structured narrative roleplay system (Kadath).
 
 ---
 
-## 🛠️ Stack Tecnológico
+## 🛠️ Technology Stack
 
-| Capa / Componente | Tecnología | Propósito |
+| Layer / Component | Technology | Purpose |
 | :--- | :--- | :--- |
-| **Lenguaje Core** | Python 3.11 | Motor de ejecución principal |
-| **Biblioteca API** | discord.py >= 2.4.0 | Cliente y pasarela de Discord (Gateway) |
-| **Cliente LLM** | google-genai >= 1.0.0 | SDK activo para Gemini y modelos paramétricos Gemma |
-| **APIs Alternativas** | openai >= 1.40.0 | Soporte para OpenRouter, DeepSeek v4 y NimLLM |
-| **Base de Datos Relacional** | aiosqlite >= 0.20.0 | Persistencia de datos transaccionales, créditos, colas y logs |
-| **Base de Datos Vectorial** | chromadb >= 0.5.0 | Memoria asíncrona a largo plazo y recuperación semántica |
-| **Motor de Embeddings** | sentence-transformers >= 3.3.0 | Generación local de vectores (`all-MiniLM-L6-v2`) |
-| **Traducción MarianMT** | sentencepiece + sacremoses | Pipeline local para el cog de traducción curse_translator |
-| **Visión (MediaGuard)** | onnxruntime >= 1.16.0 | Clasificación de imágenes (MobileNetV3) |
-| **Indexación Vectorial Media**| hnswlib >= 0.8.0 | Búsqueda aproximada por coseno para evitar duplicados en disco |
-| **Generación Gráfica** | cairosvg + Pillow | Renderizado dinámico de SVG a PNG y ensamblado de GIFs |
-| **TTS (Voz)** | Piper | Motor externo de síntesis de voz offline |
-| **Audio** | PyNaCl + mafic >= 2.11.0 | Protocolo de voz y cliente para servidores Lavalink |
-| **Confianza Automod** | goodfaith >= 0.6.0 | Biblioteca externa de toma de decisiones éticas y mitigación |
+| **Core Language** | Python 3.11 | Primary execution runtime |
+| **API Library** | discord.py >= 2.4.0 | Discord Gateway client and interface |
+| **LLM Client** | google-genai >= 1.0.0 | Active SDK for Gemini and parametric Gemma models |
+| **Alternative APIs** | openai >= 1.40.0 | SDK adapter for OpenRouter, DeepSeek v4, and NimLLM |
+| **Relational Database**| aiosqlite >= 0.20.0 | Transactional data, credits, message buffering, and logs |
+| **Vector Database** | chromadb >= 0.5.0 | Long-term semantic memory and vector retrieval |
+| **Embedding Engine** | sentence-transformers >= 3.3.0 | Local vector generation using `all-MiniLM-L6-v2` |
+| **MarianMT Translation**| sentencepiece + sacremoses | Local pipeline for the `curse_translator` cog |
+| **Vision (MediaGuard)** | onnxruntime >= 1.16.0 | Image classification using MobileNetV3 |
+| **Vector Indexing** | hnswlib >= 0.8.0 | Cosine-similarity approximate nearest neighbor search |
+| **Graphics Engine** | cairosvg + Pillow | Dynamic SVG-to-PNG rendering and GIF assembly |
+| **TTS (Voice)** | Piper | External offline text-to-speech engine |
+| **Audio Protocol** | PyNaCl + mafic >= 2.11.0 | Voice channel protocol and Lavalink node client |
+| **Ethical Moderation** | goodfaith >= 0.6.0 | External trust-first moderation framework |
 
 ---
 
-## 🏗️ Estructura del Repositorio
+## 🏗️ Repository Architecture
 
-El proyecto se organiza de manera modular separando la lógica de presentación (cogs), la infraestructura de ejecución (utils) y las bases de conocimiento (skills):
+The project is structured modularly, cleanly separating presentation logic (cogs), core services (utils), and domain knowledge bases (skills):
 
 ```
 djinn/
-├── main.py                    # Inicialización global, setup del logger y carga de cogs
-├── config.py                  # Dataclass de configuración cargada directamente del entorno
-├── pyproject.toml             # Configuración de pytest, ruff y cobertura
-├── requirements.txt           # Manifiesto estricto de dependencias de producción
-├── start.sh                   # Script de inicio en entornos UNIX
+├── main.py                    # Bootstrap, logging setup, and cog registration
+├── config.py                  # Dataclass loading configuration from environment variables
+├── pyproject.toml             # Configuration for pytest, ruff, and coverage
+├── requirements.txt           # Strict production dependency manifest
+├── start.sh                   # Startup script for UNIX environments
 │
-├── cogs/                      # Lógica de dominio y handlers de Discord
-│   ├── nlp_handler.py         # Punto de entrada de mensajes: despachador al LLM
-│   ├── message_logger.py      # Persistencia en memoria + flush por lotes a la DB
-│   ├── nexus_observer.py      # Tracking dinámico de identidades e históricos de alias
-│   ├── automod_v3.py          # Moderación activa vía Goodfaith (Wave 9)
-│   ├── media_guard/           # Clasificación visual + hash perceptual con MobileNetV3
-│   ├── dream_quest.py         # Máquina de estados narrativos del juego Kadath
-│   ├── loan_shark.py          # Lógica crediticia, tasas de interés y control de deudas
-│   ├── treasury.py            # Banco del servidor (/banco)
-│   ├── override_api.py        # API interna para control remoto (Puerto 7700)
-│   └── ... (38 cogs en total)
+├── cogs/                      # Domain logic and Discord event handlers
+│   ├── nlp_handler.py         # Message entry point: routes input to LLM
+│   ├── message_logger.py      # In-memory buffering + batch database flusher
+│   ├── nexus_observer.py      # Dynamic identity tracking and alias histories (Nexus)
+│   ├── automod_v3.py          # Goodfaith-backed active moderation
+│   ├── media_guard/           # MobileNetV3 visual classification + perceptual hashing
+│   ├── dream_quest.py         # Kadath narrative game state machine
+│   ├── loan_shark.py          # Debt logic, dynamic interest rates, and credit scores
+│   ├── treasury.py            # Guild-wide vault and banking (/banco)
+│   ├── override_api.py        # Remote control HTTP API (Port 7700)
+│   └── ... (38 cogs in total)
 │
-├── utils/                     # Componentes core del sistema
-│   ├── discord_tools.py       # ToolExecutor: Lógica interna para las 137 herramientas
+├── utils/                     # Core supporting services
+│   ├── discord_tools.py       # ToolExecutor: Inner logic for the 137 capabilities
 │   ├── tools/
-│   │   ├── _declarations.py   # Declaraciones JSON de herramientas para el LLM
-│   │   ├── _helpers.py        # Validadores matemáticos y parsers de fechas
-│   │   └── _constants.py      # Configuración de seguridad y formateadores JSON
-│   ├── orchestrator.py        # Filtro semántico de keywords y enrutado de intenciones
-│   ├── llm_client.py          # Adaptador unificado multi-proveedor con CircuitBreaker
-│   ├── database.py            # Esquema SQLite, migraciones y primitivas asíncronas
-│   ├── security.py            # SSRF guard, sandbox de comandos y permission map
-│   └── api_server.py          # API interna en localhost:8080 (Logs, métricas, health)
+│   │   ├── _declarations.py   # JSON schemas of tools exposed to the LLM
+│   │   ├── _helpers.py        # Mathematical validators and date/duration parsers
+│   │   └── _constants.py      # Security settings and JSON cleanup formatters
+│   ├── orchestrator.py        # Keyword filtering and semantic intent routing
+│   ├── llm_client.py          # Unified multi-provider LLM adapter with CircuitBreaker
+│   ├── database.py            # SQLite schema, async database operations, and migrations
+│   ├── security.py            # SSRF guard, command sandboxing, and permission checks
+│   └── api_server.py          # Core local API on localhost:8080 (Logs, metrics, health)
 │
-├── skills/                    # Conocimientos en Markdown inyectados bajo demanda
-│   ├── deudas.md              # Lógica del cobrador de préstamos
-│   ├── banco.md               # Mecánica bancaria de depósitos y pools
-│   └── ... (16 archivos de conocimiento)
+├── skills/                    # Domain-specific Markdown files injected into system prompts
+│   ├── deudas.md              # Loan enforcement behavior
+│   ├── banco.md               # Bank deposit and pool mechanics
+│   └── ... (16 knowledge files)
 │
-├── data/                      # Configuración estática y hashes perceptuales
-│   ├── safe_domains.json      # Cache local de 10k dominios seguros para anti-phishing
-│   └── banned_media.bin       # Índice vectorial HNSW de imágenes prohibidas
+├── data/                      # Static configurations and perceptual hashes
+│   ├── safe_domains.json      # Local cache of 10k safe domains for anti-phishing
+│   └── banned_media.bin       # HNSW vector index of prohibited images
 │
-├── db/                        # Directorio para archivos SQLite (gitignored)
-├── logs/                      # Históricos de logs con rotación integrada (gitignored)
-└── tests/                     # Suite completa de pruebas automatizadas
+├── db/                        # SQLite database folder (gitignored)
+├── logs/                      # Daily logs with integrated rotation (gitignored)
+└── tests/                     # Full automated testing suite
 ```
 
 ---
 
-## 🗃️ Esquema de Persistencia (SQLite)
+## 🗃️ Database Schema (SQLite)
 
-La base de datos relacional opera bajo las siguientes configuraciones de rendimiento optimizadas en `utils/database.py`:
+The database engine is configured for maximum concurrent performance in `utils/database.py` using:
 - `PRAGMA journal_mode = WAL`
 - `PRAGMA synchronous = NORMAL`
 - `PRAGMA busy_timeout = 5000`
 
-### Tablas Principales
+### Main Tables
 
-#### 1. `message_logs` (Histórico de mensajes para búsqueda contextual)
-- **Campos:** `id` (INTEGER, PK), `message_id` (TEXT, UNIQUE), `author_id` (TEXT), `author_name` (TEXT), `content` (TEXT), `channel_id` (TEXT), `guild_id` (TEXT), `created_at` (TIMESTAMP), `embedding_vector` (BLOB)
-- **Optimización:** Virtual table adjunta FTS5 sobre el campo `content` para búsquedas en texto plano instantáneas.
+#### 1. `message_logs` (Contextual search logs)
+- **Fields:** `id` (INTEGER, PK), `message_id` (TEXT, UNIQUE), `author_id` (TEXT), `author_name` (TEXT), `content` (TEXT), `channel_id` (TEXT), `guild_id` (TEXT), `created_at` (TIMESTAMP), `embedding_vector` (BLOB)
+- **Search Optimization:** FTS5 virtual table attached to `content` for instant full-text searches.
 
-#### 2. `user_credits` (Economía del bot)
-- **Campos:** `user_id` (TEXT, PK), `credits` (INTEGER), `updated_at` (TIMESTAMP)
+#### 2. `user_credits` (Economy)
+- **Fields:** `user_id` (TEXT, PK), `credits` (INTEGER), `updated_at` (TIMESTAMP)
 
-#### 3. `loans` (Préstamos individuales)
-- **Campos:** `id` (INTEGER, PK), `user_id` (TEXT), `guild_id` (TEXT), `amount` (INTEGER), `interest_rate` (REAL), `due_date` (TIMESTAMP), `missed_payments` (INTEGER), `status` (TEXT: "active", "paid", "defaulted")
+#### 3. `loans` (Individual loans)
+- **Fields:** `id` (INTEGER, PK), `user_id` (TEXT), `guild_id` (TEXT), `amount` (INTEGER), `interest_rate` (REAL), `due_date` (TIMESTAMP), `missed_payments` (INTEGER), `status` (TEXT: "active", "paid", "defaulted")
 
-#### 4. `server_vault` (Tesorería del servidor)
-- **Campos:** `guild_id` (TEXT, PK), `pool_amount` (INTEGER), `last_updated` (TIMESTAMP)
+#### 4. `server_vault` (Guild treasury)
+- **Fields:** `guild_id` (TEXT, PK), `pool_amount` (INTEGER), `last_updated` (TIMESTAMP)
 
-#### 5. `identity_associations` (Grafo de Alias / Nexus)
-- **Campos:** `alias` (TEXT), `entity_id` (TEXT), `entity_type` (TEXT), `guild_id` (TEXT), `last_seen` (TIMESTAMP)
-- **Restricción:** Unique index sobre `(alias, entity_id, guild_id)`.
-
----
-
-## 🔌 APIs Internas
-
-Djinn arranca dos interfaces HTTP internas de uso exclusivo local (seguridad por firewall local y tokens Bearer):
-
-### 1. API Core (localhost:8080)
-Administrada en `utils/api_server.py` e iniciada de manera asíncrona en el `setup_hook` del bot.
-- `GET /health`: Estado detallado de servicios, latencia del Gateway, y estado del `CircuitBreaker`.
-- `GET /api/v1/status`: Cogs cargados, versión del SDK y métricas del sistema.
-- `GET /api/v1/metrics_x`: Contadores de tokens consumidos, ejecuciones de herramientas con éxito/fallo y latencias.
-- `GET /api/v1/logs`: Streaming en tiempo real de logs del sistema mediante buffer circular.
-
-### 2. API de Control Remoto (localhost:7700)
-Definida en `cogs/override_api.py`. Permite interactuar con canales, forzar reportes diarios, leer buffers históricos y disparar llamadas de herramientas externas. Protegido por firma de cabecera `Authorization: Bearer <token>`.
-El puerto se puede cambiar dinámicamente mediante la variable de entorno `FAIRY_OVERRIDE_API_PORT`.
+#### 5. `identity_associations` (Identity Graph / Nexus)
+- **Fields:** `alias` (TEXT), `entity_id` (TEXT), `entity_type` (TEXT), `guild_id` (TEXT), `last_seen` (TIMESTAMP)
+- **Unique Constraint:** Combined unique index on `(alias, entity_id, guild_id)`.
 
 ---
 
-## 🤖 Mecánica de Ejecución (Tool Calling y Ruteo)
+## 🔌 Internal API Endpoints
+
+Djinn runs two lightweight, internal HTTP interfaces restricted to local connections (protected by firewall policies and Bearer tokens):
+
+### 1. Core API (localhost:8080)
+Managed in `utils/api_server.py` and started asynchronously in the bot's `setup_hook`.
+- `GET /health`: Complete service statuses, gateway latency, and `CircuitBreaker` states.
+- `GET /api/v1/status`: Active cogs, version strings, and running resources.
+- `GET /api/v1/metrics_x`: Token usage counters, successful/failed tool execution rates, and execution latencies.
+- `GET /api/v1/logs`: Real-time log streaming backed by an in-memory circular ring buffer.
+
+### 2. Remote Override API (localhost:7700)
+Managed in `cogs/override_api.py`. Provides REST endpoints for channel interaction, forcing daily reports, reading history buffers, and dispatching out-of-band tool requests. Protected by the header `Authorization: Bearer <token>`.
+The interface port is configurable dynamically using the `FAIRY_OVERRIDE_API_PORT` environment variable.
+
+---
+
+## 🤖 Decision Engine & Execution Flow
 
 ```mermaid
 graph TD
-    A[Mensaje entrante] --> B[nlp_handler.py]
-    B --> C[Orchestrator: Búsqueda rápida por keywords]
-    C --> D[Filtro semántico: Selección de Tools]
-    D --> E[Inyección de Skills de conocimiento .md]
-    E --> F[Inferencia en LLM]
+    A[Incoming Message] --> B[nlp_handler.py]
+    B --> C[Orchestrator: Fast Keyword Search]
+    C --> D[Semantic Filtering: Selects Subset of Tools]
+    D --> E[Knowledge Injection: Appends .md Skills]
+    E --> F[LLM Inference]
     F -->|Tool Call| G[ToolExecutor utils/discord_tools.py]
-    G --> H[Security Guard: SSRF / IP Check]
-    H --> I[Permission Gate: Roles de Discord]
-    I -->|Aprobado| J[Ejecución de Handler _do_name]
-    F -->|Respuesta de Texto| K[Envío directo al canal]
+    G --> H[Security Guard: SSRF / IP Validation]
+    H --> I[Permission Gate: Discord Role Validation]
+    I -->|Authorized| J[Execute Tool Handler _do_name]
+    F -->|Text Response| K[Direct Delivery to Channel]
 ```
 
-### Contrato de Herramientas Estricto
-- Las declaraciones JSON que el LLM consume se definen de forma explícita en `utils/tools/_declarations.py`.
-- La lógica interna de las mismas se define en `utils/discord_tools.py` mediante métodos `_do_<nombre_herramienta>`.
-- Existe un test de contrato de integridad (`tests/test_discord_tools_contract.py`) que audita en cada commit que haya una correspondencia bidireccional perfecta e idéntica de 1 a 1 entre declaraciones y métodos ejecutores.
+### Strict Tool Contract
+- JSON schemas exposed to the model are explicitly defined in `utils/tools/_declarations.py`.
+- Tool execution logic is mapped to private methods in `utils/discord_tools.py` matching the naming pattern `_do_<tool_name>`.
+- An automated integrity contract test (`tests/test_discord_tools_contract.py`) runs on every commit, verifying a bidirectional 1-to-1 match between model declarations and executable tool handlers.
 
 ---
 
-## ⚙️ Configuración y Arranque
+## ⚙️ Configuration & Quick Start
 
-### Variables de Entorno (.env)
+### Environment Variables (.env)
 ```ini
-# Configuración de Discord
-DISCORD_TOKEN=tu_discord_token
+# Discord Gateway
+DISCORD_TOKEN=your_discord_token
 
-# Motor de Inferencia
-LLM_PROVIDER=custom               # Opciones: google, openrouter, custom
+# LLM Provider
+LLM_PROVIDER=custom               # Options: google, openrouter, custom
 CUSTOM_BASE_URL=http://localhost:8090/v1
-CUSTOM_API_KEY=tu_api_key
+CUSTOM_API_KEY=your_api_key
 CUSTOM_MODEL_NAME=gemini-3.5-flash-low
 
-# APIs Adicionales
-GOOGLE_API_KEY=tu_api_key
-OPENROUTER_API_KEY=tu_api_key
+# API Keys
+GOOGLE_API_KEY=your_api_key
+OPENROUTER_API_KEY=your_api_key
 
-# Rutas de Persistencia
+# Databases
 DB_PATH=db/fairy.db
 RESPONSES_PATH=data/fairy_responses.json
 
-# Puertos Internos
+# Internal APIs
 FAIRY_API_PORT=8080
 FAIRY_OVERRIDE_API_PORT=7700
 ```
 
-### Inicio del Sistema
-El bot implementa un mecanismo de bootstrap automático:
+### Starting the Bot
+Djinn implements an automated virtual environment bootstrap system:
 ```bash
-# Otorgar permisos e iniciar
+# Make start script executable and run
 chmod +x start.sh
 ./start.sh
 ```
-El script `start.sh` buscará el entorno virtual local `venv`. Si no existe, se disparará `main.py:_bootstrap_venv` la cual creará el venv, instalará todas las dependencias listadas en `requirements.txt` y se auto-ejecutará dentro del venv asilado.
+The `start.sh` script checks for a local virtual environment (`venv`). If it is not found, `main.py:_bootstrap_venv` runs, initializes a fresh virtual environment, installs all required packages declared in `requirements.txt`, and automatically restarts the process inside the isolated environment.
 
 ---
 
-## 🧪 Pruebas Automatizadas
+## 🧪 Testing Suite
 
-La suite de pruebas contiene **375 pruebas integrales** ejecutándose de manera asíncrona.
+The codebase has a comprehensive async testing suite containing **375 test cases**.
 
 ```bash
-# Ejecutar todas las pruebas locales
+# Run the complete local test suite
 ./venv/bin/pytest tests/ -v
 ```
 
-### Cobertura de las suites principales:
-- `tests/test_discord_tools_contract.py`: Audita la coincidencia total del contrato de las 137 herramientas.
-- `tests/test_goodfaith_engine.py`: Valida el motor ético de automod y toma de decisiones basadas en reputación de usuarios.
-- `tests/test_security.py`: Valida el detector de SSRF, el bloqueo de IPs y rangos privados en herramientas web.
-- `tests/test_circuit_breaker.py`: Comprueba el comportamiento del Circuit Breaker ante fallos repetitivos del proveedor LLM externo.
-- `tests/test_database_shares.py` y `tests/test_database_credits.py`: Comprueban la consistencia y transaccionalidad de las bases de datos de créditos y préstamos.
+### Key Test Suites:
+- `tests/test_discord_tools_contract.py`: Audits the bidirectional integrity of the 137 tools.
+- `tests/test_goodfaith_engine.py`: Validates trust-based automod thresholds and reputation calculations.
+- `tests/test_security.py`: Ensures absolute protection against SSRF, verifying private IP range blocking inside web tools.
+- `tests/test_circuit_breaker.py`: Exercises LLM client behavior, ensuring proper transitions through open, closed, and half-open failure states.
+- `tests/test_database_shares.py` and `tests/test_database_credits.py`: Validates transactional atomicity for guild finances and credit records under concurrent operations.
 
 ---
 
-## ⚖️ Licencia y Copyright
+## ⚖️ License & Copyright
 
-El código fuente de Djinn está protegido bajo la licencia **GNU Affero General Public License versión 3 (AGPL-3.0)**. Puedes consultar el archivo [LICENSE](LICENSE) para ver el texto completo.
+Djinn is open-source software licensed under the **GNU Affero General Public License version 3 (AGPL-3.0)**. Refer to the [LICENSE](LICENSE) file for the full legal text.
 
 Copyright (C) 2026 @ArisRhiannon.
