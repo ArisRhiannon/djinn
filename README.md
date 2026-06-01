@@ -20,6 +20,23 @@ It uses a hybrid persistence model (SQLite in WAL mode for transactional data an
 
 ---
 
+## 🧠 Autonomous Skills & Multi-Action Engine
+
+Djinn isn't just a command-response bot; it's the ultimate **right-hand administrator**. Powered by its autonomous execution engine, Djinn can dynamically chain multiple actions together from a single conversational prompt. 
+
+### How it works:
+Instead of forcing users to type multiple rigid commands (e.g., `/ban`, then `/purge`, then `/warn`), a server admin can simply say:
+> *"Djinn, that user is spamming. Ban them, delete their messages from the last hour, and warn the other user who was arguing with them."*
+
+Djinn's LLM engine parses the intent, queries its domain **Skills** (injected `.md` knowledge bases mapping out server rules, economics, and role hierarchies), and autonomously executes an array of tools:
+1. `ban_user(user_id=X, delete_days=1)`
+2. `warn_user(user_id=Y, reason="Arguing with spammer")`
+3. `send_tts(text="Spammer neutralized.")`
+
+By dynamically bridging **137 tools**, Djinn essentially automates the entire workflow of a dedicated human moderator, bringing unprecedented fluidity to server administration.
+
+---
+
 ## 🛠️ Technology Stack
 
 | Layer / Component | Technology | Purpose |
