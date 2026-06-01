@@ -265,7 +265,6 @@ OPTIONAL_COGS: list[str] = [
     "cogs.listeners",
     "cogs.torneo",
     "cogs.model_switcher",
-    "cogs.dream_quest",
     "cogs.media_guard",
     "cogs.curse",
     "cogs.mouthwash",
