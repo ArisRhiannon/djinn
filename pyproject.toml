@@ -1,0 +1,146 @@
+# pyproject.toml — Configuración de tooling para Fairy/Youkai Bot.
+#
+# Wave 10 (F6.2 + F6.3, 2026-05-15):
+#   • ruff: linting + format inicial (sin auto-fix masivo todavía).
+#   • mypy: type-checking gradual, strict solo en módulos pequeños.
+#
+# Uso:
+#   ./venv/bin/python -m pip install ruff mypy   (una vez)
+#   ./venv/bin/ruff check .
+#   ./venv/bin/ruff format --check .             # solo verifica, no modifica
+#   ./venv/bin/mypy utils/api_server.py utils/safe_domains.py
+#
+# NOTA: el proyecto usa convenciones existentes (comentarios y docs en
+# español, variables/clases en inglés). El primer pase debe ser SOLO
+# `ruff check` (sin --fix), revisar issues, y aplicar fixes manualmente
+# o con --fix por archivo. NO ejecutar `ruff format` sobre todo el repo
+# en un único commit — destruye el blame.
+
+[project]
+name = "fairy-youkai-bot"
+description = "Discord agentic bot — Youkai/Fairy"
+readme = "README.md"  # opcional, no existe aún
+requires-python = ">=3.11"
+dynamic = ["version"]
+
+
+# ─── ruff ────────────────────────────────────────────────────────────────
+# ─── ruff ────────────────────────────────────────────────────────────────
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+extend-exclude = [
+    "venv",
+    "models",
+    "logs",
+    "deprecated",
+    "scripts/kadath_*",  # contenido narrativo del juego
+    ".code-review",
+    "tests/test_torneo_integration.py",  # legacy, mucho mock — revisar aparte
+]
+
+[tool.ruff.lint]
+# Empezamos conservador. Al ver issues, podemos endurecer.
+select = [
+    "E",     # pycodestyle errors
+    "F",     # pyflakes (errores reales: imports no usados, undefined names...)
+    "W",     # pycodestyle warnings
+    "I",     # isort (orden de imports)
+    "B",     # flake8-bugbear (bugs comunes)
+    "C4",    # flake8-comprehensions
+    "UP",    # pyupgrade (sugerencias modernas)
+    "RUF",   # ruff-specific rules
+]
+# Tolerar para no enloquecer en el primer pase:
+ignore = [
+    "E501",  # line too long — el bot tiene strings muy largos por embeds
+    "E731",  # lambda assignment — usado en SAFE_BUILTINS y similares
+    "E741",  # ambiguous variable name (l, I, O) — alguna ocurrencia legítima
+    "B008",  # function call in default arg — usado por tipos discord.Permissions()
+    "RUF001", # ambiguous unicode chars — los emojis de bot no son ambiguos
+    "RUF002",
+    "RUF003",
+    "UP007",  # X | Y typing (Python 3.11 lo soporta pero hay anotaciones legacy)
+]
+
+[tool.ruff.lint.per-file-ignores]
+# main.py tiene muchos exec/eval-adjacent legitimos para bootstrap del venv
+"main.py" = ["E402"]
+# El __init__ tipicamente reexporta sin uso aparente
+"**/__init__.py" = ["F401"]
+# Tests pueden tener asserts y mocks "raros"
+"tests/**/*.py" = ["E501", "F841", "B011"]
+
+[tool.ruff.format]
+# F6.2: NO ejecutar `ruff format` sin coordinación previa — destruye blame.
+# Esta config es solo para que `ruff format --check` reporte diferencias.
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+
+
+# ─── mypy ────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version = "3.11"
+# Modo gradual: por defecto poco estricto; strict solo en módulos curados.
+strict = false
+ignore_missing_imports = true   # discord.py + google-genai sin stubs perfectos
+follow_imports = "silent"
+warn_unused_ignores = true
+warn_redundant_casts = true
+warn_unreachable = true
+no_implicit_optional = true
+exclude = [
+    "venv/",
+    "models/",
+    "deprecated/",
+    "scripts/kadath_",
+    "logs/",
+]
+
+# Módulos donde activamos strict gradualmente. Ampliar lista cuando estén
+# limpios. NO añadir utils/discord_tools.py hasta el split (F3.1 en otra wave).
+[[tool.mypy.overrides]]
+module = [
+    "utils.security",
+    "utils.safe_domains",
+    "utils.circuit_breaker",
+    "utils.metrics",
+    "utils.audit_log",
+    "utils.nexus",
+    "utils.orch_types",
+    "utils.scene_common",
+]
+strict = true
+
+# Suprimir reglas concretas para módulos grandes hasta que sean refactorizados
+[[tool.mypy.overrides]]
+module = [
+    "utils.discord_tools",
+    "utils.llm_client",
+    "utils.database",
+    "utils.orchestrator",
+    "utils.kadath_gamestate",
+    "utils.zzz_card_renderer",
+]
+disable_error_code = [
+    "attr-defined",     # discord.py añade atributos en runtime
+    "name-defined",
+    "var-annotated",
+]
+
+
+
+# ─── pytest ──────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+# Wave 7 (F5.1): tests del proyecto.
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+testpaths = ["tests"]
+# Excluir el test legacy de torneo (44 KB de fixtures mock) hasta que sea reescrito.
+addopts = "-q --strict-markers --ignore=tests/test_torneo_integration.py"
+filterwarnings = [
+    "ignore::DeprecationWarning:asyncio",
+    "ignore::DeprecationWarning:aiosqlite",
+]

@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+
+<!-- Header bar superior con acento rojo -->
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 24 if _tl <= 22 else (20 if _tl <= 32 else 16) %}
+<text x="32" y="44" font-family="'Inter','Helvetica Neue',Helvetica,Arial,sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}
+<text x="32" y="64" font-family="'Inter','Helvetica Neue',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2" text-transform="uppercase">{{ subtitle|truncate(60, True, '…')|svg_escape }}</text>
+{% endif %}
+
+<!-- Línea separadora con acento rojo -->
+<line x1="32" y1="78" x2="768" y2="78" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="77" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Tiers -->
+{% for tier in tiers %}
+{% set tier_colors = {'S':'#E63946','A':'#FFD60A','B':'#06FFA5','C':'#06B6D4','D':'#7A7A85','F':'#4A4A55'} %}
+{% set tcolor = tier_colors.get(tier.label|string|upper, '#7A7A85') %}
+<g transform="translate(0, {{ tier._y }})">
+  <!-- Tier label box -->
+  <rect x="32" y="0" width="64" height="76" rx="4" fill="#1A1A23" stroke="{{ tcolor }}" stroke-width="1.5"/>
+  <rect x="32" y="0" width="4" height="76" rx="2" fill="{{ tcolor }}"/>
+  {% set _tll = tier.label|string|length %}{% set _tls = 32 if _tll <= 1 else (24 if _tll <= 2 else 18) %}
+  <text x="64" y="50" font-family="'Inter',sans-serif" font-size="{{ _tls }}" font-weight="800" fill="{{ tcolor }}" text-anchor="middle">{{ tier.label }}</text>
+
+  <!-- Entries -->
+  {% set tier_idx = loop.index0 %}
+  {% for item in tier.entries %}
+  <g transform="translate({{ item._x }}, 6)">
+    <rect x="0" y="0" width="64" height="64" rx="4" fill="#1A1A23" stroke="#2A2A35" stroke-width="1"/>
+    {% if item.avatar_url %}
+    <defs><clipPath id="tlav{{ tier_idx }}_{{ loop.index0 }}"><circle cx="32" cy="22" r="14"/></clipPath></defs>
+    <image href="{{ item.avatar_url }}" x="18" y="8" width="28" height="28" clip-path="url(#tlav{{ tier_idx }}_{{ loop.index0 }})" preserveAspectRatio="xMidYMid slice"/>
+    <circle cx="32" cy="22" r="14" fill="none" stroke="{{ tcolor }}" stroke-width="1" opacity="0.5"/>
+    {% set _name_y = 50 %}
+    {% else %}
+    {% set _name_y = 38 %}
+    {% endif %}
+    {% set _inl = item.name|length %}{% set _ins = 11 if _inl <= 7 else (10 if _inl <= 9 else 9) %}
+    <text x="32" y="{{ _name_y }}" font-family="'Inter',sans-serif" font-size="{{ _ins }}" font-weight="500" fill="#E0E0E5" text-anchor="middle">{{ item.name|truncate(10, True, '…')|svg_escape }}</text>
+  </g>{% endfor %}
+</g>{% endfor %}
+
+<!-- Footer -->
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · {{ tiers|length }} TIERS</text>
+</svg>

@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 24 if _tl <= 22 else (20 if _tl <= 32 else 16) %}
+<text x="32" y="44" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}<text x="32" y="64" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ subtitle|truncate(60, True, '…')|svg_escape|upper }}</text>{% endif %}
+
+<line x1="32" y1="80" x2="768" y2="80" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="79" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Línea horizontal del timeline -->
+{% set timeline_y = (height // 2) + 10 %}
+<line x1="40" y1="{{ timeline_y }}" x2="760" y2="{{ timeline_y }}" stroke="#2A2A35" stroke-width="2"/>
+
+<!-- Eventos -->
+{% for ev in events %}
+{% set is_above = loop.index0 % 2 == 0 %}
+{% set ev_color = ev.color|default('#E63946') %}
+<g>
+  <!-- Punto en la línea -->
+  <circle cx="{{ ev._x }}" cy="{{ timeline_y }}" r="6" fill="{{ ev_color }}" stroke="#0A0A0F" stroke-width="2"/>
+  <circle cx="{{ ev._x }}" cy="{{ timeline_y }}" r="10" fill="none" stroke="{{ ev_color }}" stroke-width="1" opacity="0.4"/>
+
+  {% if is_above %}
+    <!-- Arriba -->
+    <line x1="{{ ev._x }}" y1="{{ timeline_y - 8 }}" x2="{{ ev._x }}" y2="{{ timeline_y - 36 }}" stroke="{{ ev_color }}" stroke-width="1"/>
+    <text x="{{ ev._x }}" y="{{ timeline_y - 44 }}" font-family="'Inter',sans-serif" font-size="10" fill="{{ ev_color }}" text-anchor="middle" letter-spacing="1.5" font-weight="600">{{ ev.date|svg_escape|upper }}</text>
+    {% if ev.icon %}<text x="{{ ev._x }}" y="{{ timeline_y - 60 }}" font-family="'Inter',sans-serif" font-size="14" text-anchor="middle">{{ ev.icon|svg_escape }}</text>{% endif %}
+    <text x="{{ ev._x }}" y="{{ timeline_y - 78 }}" font-family="'Inter',sans-serif" font-size="11" fill="#F5F5F7" text-anchor="middle" font-weight="600">{{ ev.title|truncate(20, True, '…')|svg_escape }}</text>
+    {% if ev.description %}<text x="{{ ev._x }}" y="{{ timeline_y - 64 }}" font-family="'Inter',sans-serif" font-size="9" fill="#A0A0AA" text-anchor="middle">{{ ev.description|truncate(28, True, '…')|svg_escape }}</text>{% endif %}
+  {% else %}
+    <!-- Abajo -->
+    <line x1="{{ ev._x }}" y1="{{ timeline_y + 8 }}" x2="{{ ev._x }}" y2="{{ timeline_y + 36 }}" stroke="{{ ev_color }}" stroke-width="1"/>
+    <text x="{{ ev._x }}" y="{{ timeline_y + 50 }}" font-family="'Inter',sans-serif" font-size="10" fill="{{ ev_color }}" text-anchor="middle" letter-spacing="1.5" font-weight="600">{{ ev.date|svg_escape|upper }}</text>
+    {% if ev.icon %}<text x="{{ ev._x }}" y="{{ timeline_y + 70 }}" font-family="'Inter',sans-serif" font-size="14" text-anchor="middle">{{ ev.icon|svg_escape }}</text>{% endif %}
+    <text x="{{ ev._x }}" y="{{ timeline_y + 88 }}" font-family="'Inter',sans-serif" font-size="11" fill="#F5F5F7" text-anchor="middle" font-weight="600">{{ ev.title|truncate(20, True, '…')|svg_escape }}</text>
+    {% if ev.description %}<text x="{{ ev._x }}" y="{{ timeline_y + 102 }}" font-family="'Inter',sans-serif" font-size="9" fill="#A0A0AA" text-anchor="middle">{{ ev.description|truncate(28, True, '…')|svg_escape }}</text>{% endif %}
+  {% endif %}
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · {{ events|length }} EVENTOS</text>
+</svg>

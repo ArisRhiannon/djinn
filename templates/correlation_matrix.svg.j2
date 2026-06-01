@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 22 if _tl <= 22 else (18 if _tl <= 32 else 15) %}
+<text x="32" y="44" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}<text x="32" y="64" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ subtitle|truncate(60, True, '…')|svg_escape|upper }}</text>{% endif %}
+
+<line x1="32" y1="80" x2="768" y2="80" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="79" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Matrix -->
+{% set n = users|length %}
+{% set cell_size = ((780 - n * 4) // (n + 1)) %}
+{% if cell_size > 50 %}{% set cell_size = 50 %}{% endif %}
+{% set start_x = 200 %}
+{% set start_y = 110 %}
+
+<!-- Headers (top) -->
+{% for u in users %}
+<text x="{{ start_x + (loop.index0 * (cell_size + 4)) + (cell_size / 2) }}" y="{{ start_y - 8 }}" font-family="'Inter',sans-serif" font-size="10" fill="#A0A0AA" text-anchor="middle" letter-spacing="1">{{ u.name|truncate(8, True, '…')|svg_escape }}</text>
+{% endfor %}
+
+<!-- Rows -->
+{% for row in matrix %}
+{% set ri = loop.index0 %}
+<text x="{{ start_x - 12 }}" y="{{ start_y + (ri * (cell_size + 4)) + (cell_size / 2) + 4 }}" font-family="'Inter',sans-serif" font-size="10" fill="#A0A0AA" text-anchor="end" letter-spacing="1">{{ users[ri].name|truncate(12, True, '…')|svg_escape }}</text>
+{% for val in row %}
+{% set ci = loop.index0 %}
+{% set cx = start_x + (ci * (cell_size + 4)) %}
+{% set cy = start_y + (ri * (cell_size + 4)) %}
+{% set v = val|float %}
+{% if v >= 0 %}
+{% set fill_color = '#E63946' if v > 0.5 else ('#FFD60A' if v > 0.2 else '#1A1A23') %}
+{% set opacity = (0.3 + (v * 0.7)) %}
+{% else %}
+{% set fill_color = '#06B6D4' if v < -0.5 else '#1A1A23' %}
+{% set opacity = (0.3 + ((-v) * 0.7)) %}
+{% endif %}
+<rect x="{{ cx }}" y="{{ cy }}" width="{{ cell_size }}" height="{{ cell_size }}" rx="2" fill="{{ fill_color }}" opacity="{{ opacity }}" stroke="#2A2A35" stroke-width="0.5"/>
+<text x="{{ cx + (cell_size / 2) }}" y="{{ cy + (cell_size / 2) + 4 }}" font-family="'Inter',sans-serif" font-size="9" font-weight="600" fill="#F5F5F7" text-anchor="middle">{{ "%.2f"|format(v) }}</text>
+{% endfor %}
+{% endfor %}
+
+<!-- Legend -->
+<g transform="translate(32, {{ height - 50 }})">
+  <text x="0" y="0" font-family="'Inter',sans-serif" font-size="10" fill="#7A7A85" letter-spacing="2">CORRELACIÓN</text>
+  <text x="92" y="0" font-family="'Inter',sans-serif" font-size="9" fill="#06B6D4">-1.0</text>
+  <rect x="120" y="-9" width="180" height="10" rx="2" fill="url(#accentRed)" opacity="0.7"/>
+  <text x="320" y="0" font-family="'Inter',sans-serif" font-size="9" fill="#E63946">+1.0</text>
+</g>
+
+<!-- Footer -->
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · {{ n }}×{{ n }}</text>
+</svg>

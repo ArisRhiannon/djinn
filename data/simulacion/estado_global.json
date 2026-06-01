@@ -1,0 +1,8 @@
+{
+  "turno_actual": 0,
+  "mapa": "zona_principal",
+  "agentes_vivos": [],
+  "eventos_globales": [],
+  "estado": "inicializado",
+  "iniciado_en": null
+}

@@ -1,0 +1,30 @@
+# ── Youkai Agent — Variables de entorno (plantilla) ────────────────────────────
+# Copia este archivo como .env y rellena los valores.
+
+# ── Discord ────────────────────────────────────────────────────────────────────
+DISCORD_TOKEN=TU_TOKEN_DE_DISCORD_AQUI
+
+# ── Google AI Studio ───────────────────────────────────────────────────────────
+GOOGLE_API_KEY=TU_GOOGLE_API_KEY_AQUI
+GOOGLE_MODEL_NAME=gemma-4-26b-a4b-it
+GOOGLE_FALLBACK_MODEL=gemini-3.1-flash-lite
+
+# ── Base de datos ──────────────────────────────────────────────────────────────
+DB_PATH=db/youkai.db
+
+# ── Piper TTS ──────────────────────────────────────────────────────────────────
+TTS_ENABLED=false
+PIPER_BIN=piper
+PIPER_MODEL=models/piper/es_ES-low.onnx
+PIPER_CONFIG=models/piper/es_ES-low.onnx.json
+
+# ── Embeddings ─────────────────────────────────────────────────────────────────
+EMBED_MODEL=sentence-transformers/all-MiniLM-L6-v2
+EMBED_CACHE_DIR=models/embed
+
+# ── Rutas de datos ─────────────────────────────────────────────────────────────
+RESPONSES_PATH=data/youkai_responses.json
+BAD_DOMAINS_PATH=data/bad_domains.txt
+
+# ── SVG Engine ─────────────────────────────────────────────────────────────────
+SVG_ENABLED=true

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Header con badge "INVESTIGACIÓN" -->
+<g transform="translate(32, 32)">
+  <rect x="0" y="0" width="120" height="20" rx="2" fill="url(#accentRed)"/>
+  <text x="8" y="14" font-family="'Inter',sans-serif" font-size="10" font-weight="800" fill="#0A0A0F" letter-spacing="2">INVESTIGACIÓN</text>
+</g>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 22 if _tl <= 22 else (18 if _tl <= 32 else 15) %}
+<text x="32" y="80" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}<text x="32" y="100" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ subtitle|truncate(60, True, '…')|svg_escape|upper }}</text>{% endif %}
+
+<line x1="32" y1="116" x2="768" y2="116" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="115" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Timeline vertical (eventos en lista) -->
+{% set ev_height = 64 %}
+{% for ev in events %}
+{% set ev_y = 140 + (loop.index0 * ev_height) %}
+{% set ev_color = ev.color|default('#E63946') %}
+<g>
+  <!-- Línea vertical conectora -->
+  {% if not loop.last %}
+  <line x1="56" y1="{{ ev_y + 16 }}" x2="56" y2="{{ ev_y + ev_height + 4 }}" stroke="#2A2A35" stroke-width="1" stroke-dasharray="2,3"/>
+  {% endif %}
+
+  <!-- Punto del evento -->
+  <circle cx="56" cy="{{ ev_y + 8 }}" r="8" fill="{{ ev_color }}" stroke="#0A0A0F" stroke-width="2"/>
+  <circle cx="56" cy="{{ ev_y + 8 }}" r="14" fill="none" stroke="{{ ev_color }}" stroke-width="0.5" opacity="0.4"/>
+
+  <!-- Date -->
+  <text x="84" y="{{ ev_y + 4 }}" font-family="'Inter',sans-serif" font-size="9" fill="{{ ev_color }}" letter-spacing="2" font-weight="600">{{ ev.date|svg_escape|upper }}</text>
+
+  <!-- Title + icon -->
+  {% if ev.icon %}<text x="84" y="{{ ev_y + 24 }}" font-family="'Inter',sans-serif" font-size="14">{{ ev.icon|svg_escape }}</text>{% endif %}
+  <text x="{{ 110 if ev.icon else 84 }}" y="{{ ev_y + 24 }}" font-family="'Inter',sans-serif" font-size="13" fill="#F5F5F7" font-weight="600">{{ ev.title|truncate(60, True, '…')|svg_escape }}</text>
+
+  <!-- Description -->
+  {% if ev.description %}
+  <text x="84" y="{{ ev_y + 42 }}" font-family="'Inter',sans-serif" font-size="10" fill="#A0A0AA">{{ ev.description|truncate(90, True, '…')|svg_escape }}</text>
+  {% endif %}
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="32" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" letter-spacing="2">{{ events|length }} EVENTOS REGISTRADOS</text>
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · CASE FILE</text>
+</svg>

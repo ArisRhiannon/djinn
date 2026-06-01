@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="{{ width }}" height="{{ height }}" viewBox="0 0 {{ width }} {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="{{ width }}" height="{{ height }}" fill="url(#bgGrad)" rx="6"/>
+<rect x="0" y="0" width="{{ width }}" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% if title %}
+<text x="{{ width / 2 }}" y="32" font-family="'Inter',sans-serif" font-size="16" font-weight="700" fill="#F5F5F7" text-anchor="middle" letter-spacing="-0.3">{{ title|truncate(36, True, '…')|svg_escape }}</text>
+{% endif %}
+
+<!-- Hearts entre los avatars (geometría afilada estilo Youkai) -->
+{% for h in _hearts %}
+<g transform="translate({{ h.x }}, {{ h.y }})">
+  <!-- Heart simplificado con dos triángulos en vez de path tradicional -->
+  <path d="M 0,{{ h.size * 0.35 }} L -{{ h.size * 0.5 }},-{{ h.size * 0.1 }} L 0,-{{ h.size * 0.5 }} L {{ h.size * 0.5 }},-{{ h.size * 0.1 }} Z"
+        fill="url(#accentRed)" opacity="0.9" filter="url(#glowRed)"/>
+</g>
+{% endfor %}
+
+<!-- Avatares -->
+{% for ship in ships %}
+<g>
+  <!-- Halo -->
+  <circle cx="{{ ship._cx }}" cy="{{ ship._cy }}" r="{{ ship._r + 4 }}" fill="none" stroke="#E63946" stroke-width="1" opacity="0.5"/>
+  <!-- Avatar circle -->
+  {% if ship.avatar_url %}
+  <defs><clipPath id="lgav{{ loop.index0 }}"><circle cx="{{ ship._cx }}" cy="{{ ship._cy }}" r="{{ ship._r }}"/></clipPath></defs>
+  <circle cx="{{ ship._cx }}" cy="{{ ship._cy }}" r="{{ ship._r }}" fill="#1A1A23" stroke="#E63946" stroke-width="2"/>
+  <image href="{{ ship.avatar_url }}" x="{{ ship._ix }}" y="{{ ship._iy }}" width="{{ ship._is }}" height="{{ ship._is }}" clip-path="url(#lgav{{ loop.index0 }})" preserveAspectRatio="xMidYMid slice"/>
+  {% else %}
+  <circle cx="{{ ship._cx }}" cy="{{ ship._cy }}" r="{{ ship._r }}" fill="#1A1A23" stroke="#E63946" stroke-width="2"/>
+  <text x="{{ ship._cx }}" y="{{ ship._cy + 8 }}" font-family="'Inter',sans-serif" font-size="{{ (ship._r * 0.5)|int }}" font-weight="800" fill="#E63946" text-anchor="middle">{{ (ship.name[:2]|upper) }}</text>
+  {% endif %}
+  <!-- Name -->
+  <text x="{{ ship._cx }}" y="{{ ship._ny }}" font-family="'Inter',sans-serif" font-size="12" font-weight="600" fill="#F5F5F7" text-anchor="middle">{{ ship.name|truncate(14, True, '…')|svg_escape }}</text>
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="{{ width - 12 }}" y="{{ height - 10 }}" font-family="'Inter',sans-serif" font-size="8" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · LOVE</text>
+</svg>

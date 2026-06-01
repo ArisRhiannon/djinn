@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="280" viewBox="0 0 600 280">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="600" height="280" fill="url(#bgGrad)" rx="6"/>
+<rect x="0" y="0" width="600" height="2" fill="url(#accentRed)"/>
+<rect x="0" y="0" width="6" height="280" fill="url(#accentRed)"/>
+
+<!-- Avatar -->
+<g transform="translate(40, 40)">
+  {% if avatar_url %}
+  <defs><clipPath id="pcav"><circle cx="56" cy="56" r="54"/></clipPath></defs>
+  <circle cx="56" cy="56" r="56" fill="#1A1A23" stroke="#E63946" stroke-width="2"/>
+  <image href="{{ avatar_url }}" x="0" y="0" width="112" height="112" clip-path="url(#pcav)" preserveAspectRatio="xMidYMid slice"/>
+  {% else %}
+  <circle cx="56" cy="56" r="56" fill="#1A1A23" stroke="#E63946" stroke-width="2"/>
+  <text x="56" y="68" font-family="'Inter',sans-serif" font-size="36" font-weight="800" fill="#E63946" text-anchor="middle">{{ initials|svg_escape }}</text>
+  {% endif %}
+</g>
+
+<!-- Name + badge -->
+{% set _nl = name|length %}{% set _ns = 24 if _nl <= 14 else (20 if _nl <= 22 else 16) %}
+<text x="180" y="62" font-family="'Inter',sans-serif" font-size="{{ _ns }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.3">{{ name|truncate(28, True, '…')|svg_escape }}</text>
+
+{% if badge %}
+<g transform="translate(180, 76)">
+  <rect x="0" y="0" width="{{ (badge|length * 8) + 16 }}" height="20" rx="2" fill="#E63946"/>
+  <text x="8" y="14" font-family="'Inter',sans-serif" font-size="10" font-weight="700" fill="#0A0A0F" letter-spacing="1">{{ badge|svg_escape|upper }}</text>
+</g>
+{% endif %}
+
+{% if tag_role %}
+<text x="{{ 180 + (badge|length * 8 + 24) if badge else 180 }}" y="92" font-family="'Inter',sans-serif" font-size="10" fill="#7A7A85" letter-spacing="2">{{ tag_role|svg_escape|upper }}</text>
+{% endif %}
+
+<!-- XP bar -->
+{% if xp_total and xp_total > 0 %}
+<g transform="translate(180, 110)">
+  <text x="0" y="0" font-family="'Inter',sans-serif" font-size="9" fill="#7A7A85" letter-spacing="2">LV {{ level|default(1) }} · {{ xp_current|default(0) }}/{{ xp_total }} XP</text>
+  <rect x="0" y="8" width="370" height="6" rx="3" fill="#1A1A23"/>
+  <rect x="0" y="8" width="{{ _xp_px }}" height="6" rx="3" fill="url(#accentRed)"/>
+</g>
+{% endif %}
+
+<!-- Stats -->
+{% if stats %}
+<g transform="translate(40, 180)">
+  <line x1="0" y1="0" x2="520" y2="0" stroke="#2A2A35" stroke-width="1"/>
+  {% for stat in stats[:4] %}
+  <g transform="translate({{ loop.index0 * 130 + 8 }}, 16)">
+    <text x="0" y="12" font-family="'Inter',sans-serif" font-size="9" fill="#7A7A85" letter-spacing="2">{{ stat.label|truncate(14)|svg_escape|upper }}</text>
+    <text x="0" y="38" font-family="'Inter',sans-serif" font-size="20" font-weight="700" fill="#F5F5F7">{{ stat.value|svg_escape }}</text>
+  </g>
+  {% endfor %}
+</g>
+{% endif %}
+
+<!-- Footer -->
+<text x="568" y="266" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · PROFILE</text>
+</svg>

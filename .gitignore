@@ -1,0 +1,43 @@
+# ── Djinn — .gitignore ────────────────────────────────────────────────────
+
+# Secretos y datos personales — NUNCA al repo
+.env
+db/
+logs/
+data/personas/
+data/kadath_saves/
+data/banned_media.bin
+data/banned_media_meta.json
+data/dashboard.json
+
+# Entorno Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Modelos ML (pesados)
+models/
+*.onnx
+*.onnx.data
+*.bin
+
+# ChromaDB y vector stores
+chromadb/
+
+# Editor y sistema
+.vscode/
+.idea/
+*.DS_Store
+*.swp
+
+# Logs
+*.log

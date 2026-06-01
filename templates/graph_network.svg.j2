@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 22 if _tl <= 22 else (18 if _tl <= 32 else 15) %}
+<text x="32" y="44" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}<text x="32" y="64" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ subtitle|truncate(60, True, '…')|svg_escape|upper }}</text>{% endif %}
+
+<line x1="32" y1="80" x2="768" y2="80" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="79" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Edges (líneas entre nodos) -->
+<g>
+{% for edge in edges %}
+{% set weight = edge.weight|default(1) %}
+{% set opacity = (weight / max_weight) if max_weight > 0 else 0.3 %}
+{% set stroke_w = 0.5 + (weight / max_weight * 2.5) if max_weight > 0 else 1 %}
+<line x1="{{ edge.x1 }}" y1="{{ edge.y1 }}" x2="{{ edge.x2 }}" y2="{{ edge.y2 }}" stroke="#E63946" stroke-width="{{ stroke_w }}" opacity="{{ [opacity, 0.15]|max }}"/>
+{% endfor %}
+</g>
+
+<!-- Nodes -->
+{% for node in nodes %}
+{% set node_idx = loop.index0 %}
+<g>
+  <!-- Halo / glow -->
+  <circle cx="{{ node.x }}" cy="{{ node.y }}" r="{{ node.radius + 4 }}" fill="none" stroke="#E63946" stroke-width="0.5" opacity="0.4"/>
+  <!-- Avatar o initials -->
+  {% if node.avatar_url %}
+  <defs><clipPath id="gnav{{ node_idx }}"><circle cx="{{ node.x }}" cy="{{ node.y }}" r="{{ node.radius - 1 }}"/></clipPath></defs>
+  <circle cx="{{ node.x }}" cy="{{ node.y }}" r="{{ node.radius }}" fill="#1A1A23" stroke="#E63946" stroke-width="1.5"/>
+  <image href="{{ node.avatar_url }}" x="{{ node.x - node.radius }}" y="{{ node.y - node.radius }}" width="{{ node.radius * 2 }}" height="{{ node.radius * 2 }}" clip-path="url(#gnav{{ node_idx }})" preserveAspectRatio="xMidYMid slice"/>
+  {% else %}
+  <circle cx="{{ node.x }}" cy="{{ node.y }}" r="{{ node.radius }}" fill="#1A1A23" stroke="#E63946" stroke-width="1.5"/>
+  <text x="{{ node.x }}" y="{{ node.y + 4 }}" font-family="'Inter',sans-serif" font-size="{{ (node.radius * 0.7)|int }}" font-weight="700" fill="#FFD60A" text-anchor="middle">{{ node.initials|svg_escape }}</text>
+  {% endif %}
+  <!-- Name label below -->
+  <text x="{{ node.x }}" y="{{ node.y + node.radius + 14 }}" font-family="'Inter',sans-serif" font-size="10" font-weight="600" fill="#E0E0E5" text-anchor="middle">{{ node.name|truncate(14, True, '…')|svg_escape }}</text>
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="32" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" letter-spacing="2">{{ nodes|length }} NODOS · {{ edges|length }} CONEXIONES</text>
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · NETWORK</text>
+</svg>

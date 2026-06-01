@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 24 if _tl <= 22 else (20 if _tl <= 32 else 16) %}
+<text x="32" y="44" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}<text x="32" y="64" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ subtitle|truncate(60, True, '…')|svg_escape|upper }}</text>{% endif %}
+
+<!-- Separador -->
+<line x1="32" y1="80" x2="768" y2="80" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="79" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Stats grid -->
+{% for stat in stats %}
+<g transform="translate({{ stat._x }}, {{ stat._y }})">
+  <!-- Card background -->
+  <rect x="8" y="0" width="{{ (740 // ([stats|length, 4]|min)) - 16 }}" height="86" rx="4" fill="#1A1A23" stroke="#2A2A35" stroke-width="1"/>
+  <!-- Top accent -->
+  <rect x="8" y="0" width="32" height="2" fill="url(#accentRed)"/>
+
+  <!-- Icon -->
+  {% if stat.icon %}
+  <text x="24" y="32" font-family="'Inter',sans-serif" font-size="20" fill="#FFD60A">{{ stat.icon|svg_escape }}</text>
+  {% endif %}
+
+  <!-- Label -->
+  {% if stat.label %}
+  <text x="{{ 56 if stat.icon else 24 }}" y="28" font-family="'Inter',sans-serif" font-size="10" fill="#7A7A85" letter-spacing="2">{{ stat.label|truncate(20)|svg_escape|upper }}</text>
+  {% endif %}
+
+  <!-- Value -->
+  {% set _vl = (stat.value|string)|length %}{% set _vs = 28 if _vl <= 6 else (22 if _vl <= 10 else 18) %}
+  <text x="24" y="{{ 64 if stat.icon or stat.label else 56 }}" font-family="'Inter',sans-serif" font-size="{{ _vs }}" font-weight="800" fill="#F5F5F7">{{ stat.value|svg_escape }}</text>
+
+  <!-- Trend -->
+  {% if stat.trend %}
+  {% set trend_str = stat.trend|string %}
+  {% set is_pos = trend_str.startswith('+') %}
+  {% set is_neg = trend_str.startswith('-') %}
+  {% set tcolor = '#06FFA5' if is_pos else ('#E63946' if is_neg else '#FFD60A') %}
+  <text x="24" y="80" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="{{ tcolor }}">{{ trend_str|svg_escape }}</text>
+  {% endif %}
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · {{ stats|length }} STATS</text>
+</svg>

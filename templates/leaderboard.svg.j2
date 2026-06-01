@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="{{ height }}" viewBox="0 0 800 {{ height }}">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="{{ height }}" fill="url(#bgGrad)" rx="4"/>
+
+<!-- Header bar -->
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 24 if _tl <= 22 else (20 if _tl <= 32 else 16) %}
+<text x="32" y="44" font-family="'Inter','Helvetica Neue',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+<text x="32" y="64" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ period|svg_escape|upper }}</text>
+
+<!-- Separador -->
+<line x1="32" y1="80" x2="768" y2="80" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="79" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Headers de columnas -->
+<text x="48" y="100" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" letter-spacing="2">RANK</text>
+<text x="120" y="100" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" letter-spacing="2">USUARIO</text>
+<text x="468" y="100" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" letter-spacing="2">ACTIVIDAD</text>
+<text x="752" y="100" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="2">VALOR</text>
+
+<!-- Filas -->
+{% for row in rows %}
+{% set _nl = row.name|length %}{% set _ns = 14 if _nl <= 14 else (12 if _nl <= 22 else 10) %}
+{% set _dl = (row.detail|default(''))|length %}{% set _ds = 10 if _dl <= 34 else 9 %}
+<g transform="translate(0, {{ row._y }})">
+{% if row.rank == 1 %}
+  <rect x="32" y="0" width="736" height="56" rx="4" fill="#1A1419" stroke="#E63946" stroke-width="1"/>
+  <rect x="32" y="0" width="3" height="56" fill="url(#accentRed)"/>
+  <text x="60" y="34" font-family="'Inter',sans-serif" font-size="20" font-weight="800" fill="#E63946">01</text>
+  {% if row.avatar_url %}
+  <defs><clipPath id="lbav{{ loop.index0 }}"><circle cx="100" cy="28" r="14"/></clipPath></defs>
+  <image href="{{ row.avatar_url }}" x="86" y="14" width="28" height="28" clip-path="url(#lbav{{ loop.index0 }})" preserveAspectRatio="xMidYMid slice"/>
+  <circle cx="100" cy="28" r="14" fill="none" stroke="#E63946" stroke-width="1.5" opacity="0.6"/>
+  {% endif %}
+  <text x="124" y="26" font-family="'Inter',sans-serif" font-size="{{ _ns }}" font-weight="600" fill="#F5F5F7">{{ row.name|truncate(28, True, '…')|svg_escape }}</text>
+  <text x="124" y="42" font-family="'Inter',sans-serif" font-size="{{ _ds }}" fill="#7A7A85">{{ row.detail|default('')|truncate(40, True, '…')|svg_escape }}</text>
+  <rect x="468" y="24" width="240" height="6" rx="3" fill="#2A2A35"/>
+  <rect x="468" y="24" width="{{ row._bar_px_240 }}" height="6" rx="3" fill="url(#accentRed)"/>
+  <text x="752" y="34" font-family="'Inter',sans-serif" font-size="16" font-weight="800" fill="#E63946" text-anchor="end">{{ row.value|comma }}</text>
+{% elif row.rank == 2 %}
+  <rect x="32" y="0" width="736" height="50" rx="4" fill="#1A1A23" stroke="#FFD60A" stroke-width="1"/>
+  <rect x="32" y="0" width="3" height="50" fill="url(#accentYellow)"/>
+  <text x="60" y="32" font-family="'Inter',sans-serif" font-size="18" font-weight="700" fill="#FFD60A">02</text>
+  {% if row.avatar_url %}
+  <defs><clipPath id="lbav{{ loop.index0 }}"><circle cx="100" cy="25" r="13"/></clipPath></defs>
+  <image href="{{ row.avatar_url }}" x="87" y="12" width="26" height="26" clip-path="url(#lbav{{ loop.index0 }})" preserveAspectRatio="xMidYMid slice"/>
+  <circle cx="100" cy="25" r="13" fill="none" stroke="#FFD60A" stroke-width="1" opacity="0.5"/>
+  {% endif %}
+  <text x="124" y="24" font-family="'Inter',sans-serif" font-size="{{ _ns }}" font-weight="500" fill="#E0E0E5">{{ row.name|truncate(28, True, '…')|svg_escape }}</text>
+  <text x="124" y="38" font-family="'Inter',sans-serif" font-size="{{ _ds }}" fill="#7A7A85">{{ row.detail|default('')|truncate(40, True, '…')|svg_escape }}</text>
+  <rect x="468" y="22" width="240" height="5" rx="2.5" fill="#2A2A35"/>
+  <rect x="468" y="22" width="{{ row._bar_px_240 }}" height="5" rx="2.5" fill="url(#accentYellow)"/>
+  <text x="752" y="32" font-family="'Inter',sans-serif" font-size="14" font-weight="700" fill="#FFD60A" text-anchor="end">{{ row.value|comma }}</text>
+{% elif row.rank == 3 %}
+  <rect x="32" y="0" width="736" height="50" rx="4" fill="#141A1A" stroke="#06FFA5" stroke-width="1"/>
+  <rect x="32" y="0" width="3" height="50" fill="url(#accentCyan)"/>
+  <text x="60" y="32" font-family="'Inter',sans-serif" font-size="18" font-weight="700" fill="#06FFA5">03</text>
+  {% if row.avatar_url %}
+  <defs><clipPath id="lbav{{ loop.index0 }}"><circle cx="100" cy="25" r="13"/></clipPath></defs>
+  <image href="{{ row.avatar_url }}" x="87" y="12" width="26" height="26" clip-path="url(#lbav{{ loop.index0 }})" preserveAspectRatio="xMidYMid slice"/>
+  <circle cx="100" cy="25" r="13" fill="none" stroke="#06FFA5" stroke-width="1" opacity="0.5"/>
+  {% endif %}
+  <text x="124" y="24" font-family="'Inter',sans-serif" font-size="{{ _ns }}" font-weight="500" fill="#E0E0E5">{{ row.name|truncate(28, True, '…')|svg_escape }}</text>
+  <text x="124" y="38" font-family="'Inter',sans-serif" font-size="{{ _ds }}" fill="#7A7A85">{{ row.detail|default('')|truncate(40, True, '…')|svg_escape }}</text>
+  <rect x="468" y="22" width="240" height="5" rx="2.5" fill="#2A2A35"/>
+  <rect x="468" y="22" width="{{ row._bar_px_240 }}" height="5" rx="2.5" fill="url(#accentCyan)"/>
+  <text x="752" y="32" font-family="'Inter',sans-serif" font-size="14" font-weight="700" fill="#06FFA5" text-anchor="end">{{ row.value|comma }}</text>
+{% else %}
+  <text x="60" y="28" font-family="'Inter',sans-serif" font-size="13" font-weight="500" fill="#7A7A85">{{ "%02d"|format(row.rank) }}</text>
+  {% if row.avatar_url %}
+  <defs><clipPath id="lbav{{ loop.index0 }}"><circle cx="100" cy="22" r="11"/></clipPath></defs>
+  <image href="{{ row.avatar_url }}" x="89" y="11" width="22" height="22" clip-path="url(#lbav{{ loop.index0 }})" preserveAspectRatio="xMidYMid slice"/>
+  {% endif %}
+  <text x="124" y="22" font-family="'Inter',sans-serif" font-size="{{ _ns - 1 }}" fill="#C0C0C5">{{ row.name|truncate(30, True, '…')|svg_escape }}</text>
+  <text x="124" y="36" font-family="'Inter',sans-serif" font-size="{{ _ds }}" fill="#5A5A65">{{ row.detail|default('')|truncate(42, True, '…')|svg_escape }}</text>
+  <rect x="468" y="20" width="240" height="3" rx="1.5" fill="#1F1F28"/>
+  <rect x="468" y="20" width="{{ row._bar_px_240 }}" height="3" rx="1.5" fill="#7A7A85"/>
+  <text x="752" y="28" font-family="'Inter',sans-serif" font-size="12" fill="#A0A0AA" text-anchor="end">{{ row.value|comma }}</text>
+{% endif %}
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="32" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" letter-spacing="2">{{ rows|length }} REGISTROS</text>
+<text x="768" y="{{ height - 14 }}" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI</text>
+</svg>

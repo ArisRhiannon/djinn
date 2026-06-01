@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="480" viewBox="0 0 800 480">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="480" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 24 if _tl <= 22 else (20 if _tl <= 32 else 16) %}
+<text x="32" y="44" font-family="'Inter','Helvetica Neue',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+{% if subtitle %}<text x="32" y="64" font-family="'Inter',sans-serif" font-size="11" fill="#7A7A85" letter-spacing="2">{{ subtitle|truncate(60, True, '…')|svg_escape|upper }}</text>{% endif %}
+
+<!-- Separador -->
+<line x1="32" y1="80" x2="768" y2="80" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="79" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Eje Y con valores -->
+<line x1="60" y1="100" x2="60" y2="410" stroke="#2A2A35" stroke-width="1"/>
+<line x1="60" y1="410" x2="780" y2="410" stroke="#2A2A35" stroke-width="1"/>
+
+<!-- Líneas grid -->
+{% for i in range(5) %}
+{% set y_pos = 100 + i * 77 %}
+<line x1="60" y1="{{ y_pos }}" x2="780" y2="{{ y_pos }}" stroke="#1A1A23" stroke-width="0.5" stroke-dasharray="2,4"/>
+{% endfor %}
+
+<!-- Bars -->
+{% for bar in bars %}
+<g>
+  <!-- Bar -->
+  <rect x="{{ bar._x }}" y="{{ bar._y }}" width="{{ bar._width }}" height="{{ bar._height }}" fill="url(#accentRed)" opacity="0.95"/>
+  <!-- Top accent line -->
+  <rect x="{{ bar._x }}" y="{{ bar._y }}" width="{{ bar._width }}" height="2" fill="#FFD60A"/>
+  <!-- Valor encima -->
+  <text x="{{ bar._center_x }}" y="{{ bar._y - 6 }}" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="#F5F5F7" text-anchor="middle">{{ bar.value|comma }}</text>
+  <!-- Label debajo -->
+  {% set _ll = bar.label|length %}{% set _lsz = 10 if _ll <= 12 else 9 %}
+  <text x="{{ bar._center_x }}" y="430" font-family="'Inter',sans-serif" font-size="{{ _lsz }}" fill="#A0A0AA" text-anchor="middle">{{ bar.label|truncate(15, True, '…')|svg_escape }}</text>
+</g>
+{% endfor %}
+
+<!-- Footer -->
+<text x="768" y="466" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · MAX {{ max_value|int|comma }}</text>
+</svg>

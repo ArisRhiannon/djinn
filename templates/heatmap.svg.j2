@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="420" viewBox="0 0 800 420">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="800" height="420" fill="url(#bgGrad)" rx="4"/>
+<rect x="0" y="0" width="800" height="2" fill="url(#accentRed)"/>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 24 if _tl <= 22 else (20 if _tl <= 32 else 16) %}
+<text x="32" y="44" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="700" fill="#F5F5F7" letter-spacing="-0.5">{{ title|truncate(40, True, '…')|svg_escape }}</text>
+
+<line x1="32" y1="64" x2="768" y2="64" stroke="#2A2A35" stroke-width="1"/>
+<rect x="32" y="63" width="48" height="2" fill="url(#accentRed)"/>
+
+<!-- Hour labels (top) -->
+{% set hour_count = hour_labels|length %}
+{% set cell_w = 690.0 / hour_count %}
+{% for hl in hour_labels %}
+<text x="{{ 80 + (loop.index0 * cell_w) + (cell_w / 2) }}" y="92" font-family="'Inter',sans-serif" font-size="10" fill="#7A7A85" text-anchor="middle" letter-spacing="1">{{ hl|svg_escape }}</text>
+{% endfor %}
+
+<!-- Day labels (left) + cells -->
+{% set day_count = day_labels|length %}
+{% set cell_h = 240.0 / day_count %}
+{% for day_row in data %}
+{% set row_idx = loop.index0 %}
+<text x="60" y="{{ 110 + (row_idx * cell_h) + (cell_h / 2) + 4 }}" font-family="'Inter',sans-serif" font-size="11" font-weight="600" fill="#A0A0AA" text-anchor="end" letter-spacing="1">{{ day_labels[row_idx]|svg_escape|upper }}</text>
+{% for cell in day_row %}
+{% set col_idx = loop.index0 %}
+<rect x="{{ 80 + (col_idx * cell_w) + 1 }}" y="{{ 100 + (row_idx * cell_h) + 1 }}" width="{{ cell_w - 2 }}" height="{{ cell_h - 2 }}" rx="2" fill="{{ cell._color }}" opacity="{{ 0.3 + (cell._intensity / 150.0) }}"/>
+{% if cell._intensity > 70 %}
+<text x="{{ 80 + (col_idx * cell_w) + (cell_w / 2) }}" y="{{ 100 + (row_idx * cell_h) + (cell_h / 2) + 3 }}" font-family="'Inter',sans-serif" font-size="9" font-weight="700" fill="#FFD60A" text-anchor="middle">{{ cell._intensity }}</text>
+{% endif %}
+{% endfor %}
+{% endfor %}
+
+<!-- Legend (bottom) -->
+<g transform="translate(32, 360)">
+  <text x="0" y="0" font-family="'Inter',sans-serif" font-size="10" fill="#7A7A85" letter-spacing="2">INTENSIDAD</text>
+  {% for level in [0, 25, 50, 75, 100] %}
+  <rect x="{{ 80 + loop.index0 * 28 }}" y="-8" width="24" height="10" rx="2" fill="{{ level|hex_color(0, 100) }}" opacity="{{ 0.3 + (level / 150.0) }}"/>
+  <text x="{{ 92 + loop.index0 * 28 }}" y="14" font-family="'Inter',sans-serif" font-size="9" fill="#7A7A85" text-anchor="middle">{{ level }}</text>
+  {% endfor %}
+</g>
+
+<!-- Footer -->
+<text x="768" y="406" font-family="'Inter',sans-serif" font-size="9" fill="#4A4A55" text-anchor="end" letter-spacing="3">YOUKAI · HEATMAP</text>
+</svg>

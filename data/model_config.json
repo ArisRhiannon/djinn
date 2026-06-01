@@ -1,0 +1,9 @@
+{
+  "llm_provider": "custom",
+  "google_model_name": "gemini-3.1-flash-lite-preview",
+  "openrouter_model_name": "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
+  "custom_model_name": "gemini-3.5-flash-low",
+  "custom_disable_thinking": false,
+  "nim_model_name": "qwen/qwen3.5-397b-a17b",
+  "kiro_model_name": "claude-sonnet-4.6"
+}

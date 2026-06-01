@@ -1,0 +1,48 @@
+name: CI
+
+# Wave 10 (F6.1, 2026-05-15): pipeline básico para PRs y push a main.
+# Hasta que el repo esté en GitHub/GitLab, este archivo NO se ejecuta — está
+# preparado para activarse al añadir un remoto.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dev dependencies (light)
+        run: |
+          python -m pip install --upgrade pip
+          # Solo lo necesario para lint + tests pequeños — sin discord.py,
+          # google-genai, ML stack. Los tests requieren mocks ligeros.
+          python -m pip install pytest==8.3.4 pytest-asyncio==0.24.0 \
+                                aiosqlite==0.20.0 loguru==0.7.2 \
+                                ruff==0.9.7 mypy==1.13.0
+
+      - name: Ruff lint
+        run: ruff check .
+        continue-on-error: true   # primer pase: reportar sin bloquear
+
+      - name: Mypy (módulos curados)
+        run: |
+          mypy utils/security.py utils/safe_domains.py \
+               utils/circuit_breaker.py utils/metrics.py 2>&1 || true
+        continue-on-error: true
+
+      - name: Pytest (suite ligera, sin Discord)
+        run: |
+          pytest tests/test_security.py tests/test_safe_domains.py \
+                 tests/test_circuit_breaker.py tests/test_metrics.py \
+                 tests/test_db_maintenance.py -v

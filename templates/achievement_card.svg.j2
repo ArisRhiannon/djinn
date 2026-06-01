@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="200" viewBox="0 0 600 200">
+{% include '_theme_youkai.svg.j2' %}
+<rect width="600" height="200" fill="url(#bgGrad)" rx="6"/>
+<rect x="0" y="0" width="6" height="200" fill="url(#accentRed)"/>
+<rect x="594" y="0" width="6" height="200" fill="url(#accentRed)"/>
+
+<!-- Patrón sutil -->
+<g opacity="0.06">
+  <line x1="0" y1="200" x2="200" y2="0" stroke="#E63946" stroke-width="1"/>
+  <line x1="50" y1="200" x2="250" y2="0" stroke="#E63946" stroke-width="1"/>
+</g>
+
+<!-- Icon -->
+<g transform="translate(40, 40)">
+  <rect x="0" y="0" width="120" height="120" rx="8" fill="#1A1A23" stroke="#E63946" stroke-width="2"/>
+  <text x="60" y="84" font-family="'Inter',sans-serif" font-size="56" text-anchor="middle">{{ icon|svg_escape }}</text>
+</g>
+
+<!-- Badge LOGRO -->
+<g transform="translate(190, 40)">
+  <rect x="0" y="0" width="76" height="20" rx="2" fill="url(#accentRed)"/>
+  <text x="8" y="14" font-family="'Inter',sans-serif" font-size="10" font-weight="800" fill="#0A0A0F" letter-spacing="2">LOGRO</text>
+</g>
+
+<!-- Título -->
+{% set _tl = title|length %}{% set _ts = 22 if _tl <= 24 else (18 if _tl <= 36 else 16) %}
+<text x="190" y="92" font-family="'Inter',sans-serif" font-size="{{ _ts }}" font-weight="800" fill="#F5F5F7" letter-spacing="-0.3">{{ title|truncate(40, True, '…')|svg_escape|upper }}</text>
+
+<!-- Description -->
+{% if description %}
+<text x="190" y="116" font-family="'Inter',sans-serif" font-size="11" fill="#A0A0AA">{{ description|truncate(60, True, '…')|svg_escape }}</text>
+{% endif %}
+
+<!-- Progress -->
+{% if progress %}
+<g transform="translate(190, 132)">
+  <text x="0" y="0" font-family="'Inter',sans-serif" font-size="10" fill="#7A7A85" letter-spacing="2">PROGRESO {{ progress.current }}/{{ progress.total }}</text>
+  <rect x="0" y="6" width="350" height="6" rx="3" fill="#1A1A23"/>
+  {% set _pct = (progress.current / progress.total * 350) if progress.total > 0 else 0 %}
+  <rect x="0" y="6" width="{{ _pct|int }}" height="6" rx="3" fill="url(#accentRed)"/>
+</g>
+{% endif %}
+
+<!-- Date -->
+{% if date %}
+<text x="566" y="174" font-family="'Inter',sans-serif" font-size="10" fill="#FFD60A" text-anchor="end" letter-spacing="2">{{ date|svg_escape|upper }}</text>
+{% endif %}
+</svg>

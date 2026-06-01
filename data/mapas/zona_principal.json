@@ -1,0 +1,44 @@
+{
+  "zonas": {
+    "bosque_norte": {
+      "descripcion": "Bosque denso con árboles antiguos. La luz apenas permea el dosel.",
+      "conexiones": ["rio", "cueva"],
+      "recursos": ["madera", "frutos_silvestres", "setas"]
+    },
+    "rio": {
+      "descripcion": "Río de aguas turbulentas que cruza el valle. El sonido es ensordecedor.",
+      "conexiones": ["bosque_norte", "bunker", "pradera"],
+      "recursos": ["agua", "peces", "pedernales"]
+    },
+    "cueva": {
+      "descripcion": "Cueva oscura con ecos extraños. El aire es frío y húmedo.",
+      "conexiones": ["bosque_norte", "mina"],
+      "recursos": ["mineral", "huesos", "oscuridad"]
+    },
+    "bunker": {
+      "descripcion": "Bunker abandonado de la Guerra Fría. Puertas de acero oxidado.",
+      "conexiones": ["rio", "mina"],
+      "recursos": ["medicamentos", "municion", "equipo_militar"]
+    },
+    "pradera": {
+      "descripcion": "Pradera cubierta de hierba alta. El viento susurra entre las flores.",
+      "conexiones": ["rio", "casa_abandonada"],
+      "recursos": ["hierbas", "insectos", "madera_seca"]
+    },
+    "mina": {
+      "descripcion": "Mina abandonada con vetas de mineral visibles en las paredes.",
+      "conexiones": ["cueva", "bunker"],
+      "recursos": ["mineral_valioso", "carbon", "herramientas_antiguas"]
+    },
+    "casa_abandonada": {
+      "descripcion": "Casa en ruinas con el tejado derrumbado. Nadie ha vivido aquí en años.",
+      "conexiones": ["pradera"],
+      "recursos": ["madera", "tela", "latas_conservas"]
+    },
+    "cima": {
+      "descripcion": "Cima de la montaña con vista panorámica. El aire es limpio y helado.",
+      "conexiones": ["mina"],
+      "recursos": ["hierbas_montana", "piedras_preciosas", "vista"]
+    }
+  }
+}
