@@ -44,6 +44,10 @@ Unlike standard bots that just apply a simple mute or timeout, Djinn features an
 
 This effectively provides a state-of-the-art "jail" system, executed flawlessly from a single natural language request.
 
+### 🔐 Zero-Trust Authentication: The "Reader" List
+To protect these immense administrative capabilities from prompt injection or unauthorized access, Djinn employs a strict **Zero-Trust Role-Based Access Control (RBAC)** model. 
+Regular users communicating with Djinn are routed through a restricted, lightweight pipeline devoid of LLM administrative tools. To unlock Djinn's autonomous administrative engine and allow it to read and execute complex tasks, a user must be explicitly granted a verified **Reader Role** (saved securely in the SQLite `youkai_readers` registry). Without being on the Reader List, no natural language prompt will ever coerce Djinn into executing a secure tool.
+
 ---
 
 ## 🛠️ Technology Stack
