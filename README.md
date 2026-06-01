@@ -68,6 +68,8 @@ Regular users communicating with Djinn are routed through a restricted, lightwei
 
 ## 🏗️ Repository Architecture
 
+> 📚 **Want to dig deeper or contribute?** Check out our comprehensive [Developer Guide & Code Review](docs/DEVELOPER_GUIDE.md) for a deep dive into Djinn's inner workings.
+
 The project is structured modularly, cleanly separating presentation logic (cogs), core services (utils), and domain knowledge bases (skills):
 
 ```text
