@@ -283,7 +283,6 @@ OPTIONAL_COGS: list[str] = [
     "cogs.music",
     "cogs.zzz_calendar",
     "cogs.treasury",  # D J I N N · B A N K: pool del servidor + /banco commands.
-    "cogs.override_api",
     "cogs.aware",
     "cogs.db_maintenance",  # Wave 3 (F1.2 backup + F2.2 VACUUM): mantenimiento periódico de la DB.
     "cogs.idle_pinger",     # Posts hollow-knight gif after 1h of no activity in #channel.
