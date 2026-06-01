@@ -27,7 +27,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
 
-logger = logging.getLogger("youkai.zzz_calendar.data")
+logger = logging.getLogger("djinn.zzz_calendar.data")
 
 
 @dataclass

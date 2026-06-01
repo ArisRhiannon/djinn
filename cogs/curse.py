@@ -26,7 +26,7 @@ from discord.ext import commands
 from utils.curse_translator import CurseTranslator
 from utils.curse_webhook import CurseWebhookManager
 
-logger = logging.getLogger("youkai.curse")
+logger = logging.getLogger("djinn.curse")
 
 # ── Constantes ────────────────────────────────────────────────────────────────
 

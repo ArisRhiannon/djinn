@@ -14,7 +14,7 @@ from playwright.async_api import async_playwright
 
 from .cropper import smart_square_crop
 
-logger = logging.getLogger("youkai.music_renderer")
+logger = logging.getLogger("djinn.music_renderer")
 
 _TEMPLATE = """<!DOCTYPE html><html><head><style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Inter:wght@500;700;900&display=swap');

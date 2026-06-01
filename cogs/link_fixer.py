@@ -15,7 +15,7 @@ import aiohttp
 import discord
 from discord.ext import commands, tasks
 
-logger = logging.getLogger("youkai.link_fixer")
+logger = logging.getLogger("djinn.link_fixer")
 
 # Regex para extraer URLs
 URL_REGEX = re.compile(r'(https?://[^\s]+)')

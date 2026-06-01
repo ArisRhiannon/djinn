@@ -17,7 +17,7 @@ import logging
 
 from .cog import MediaGuardCog
 
-logger = logging.getLogger("youkai.mediaguard")
+logger = logging.getLogger("djinn.mediaguard")
 
 
 async def setup(bot) -> None:

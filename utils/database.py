@@ -27,7 +27,7 @@ import numpy as np
 import logging
 from utils.chroma_memory import ChromaMemory
 
-logger = logging.getLogger("youkai.database")
+logger = logging.getLogger("djinn.database")
 
 
 def _sanitize_fts5(query: str) -> str:

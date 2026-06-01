@@ -15,7 +15,7 @@ from PIL import Image, ImageSequence
 
 from .thresholds import DEFAULT_GIF_FRAMES, MAX_GIF_FRAMES
 
-logger = logging.getLogger("youkai.mediaguard.gif")
+logger = logging.getLogger("djinn.mediaguard.gif")
 
 
 def is_gif(data: bytes) -> bool:

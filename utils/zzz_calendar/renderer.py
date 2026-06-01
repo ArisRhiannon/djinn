@@ -12,7 +12,7 @@ from typing import Optional
 from utils.zzz_calendar.assets import prefetch_calendar_assets
 from utils.zzz_calendar.data import Banner, CalendarData, Event
 
-logger = logging.getLogger("youkai.zzz_calendar.renderer")
+logger = logging.getLogger("djinn.zzz_calendar.renderer")
 
 TEMPLATE_PATH = Path(__file__).parent / "template.html"
 W = 1100

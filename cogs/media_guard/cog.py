@@ -38,7 +38,7 @@ from .thresholds import (
     REVIEW_CHANNEL_ENV,
 )
 
-logger = logging.getLogger("youkai.mediaguard.cog")
+logger = logging.getLogger("djinn.mediaguard.cog")
 
 
 class MediaGuardCog(commands.Cog):

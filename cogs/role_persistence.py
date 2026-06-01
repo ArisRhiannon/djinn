@@ -16,7 +16,7 @@ from discord.ext import commands
 
 from utils.security import PermLevel, require_level
 
-logger = logging.getLogger("youkai.role_persistence")
+logger = logging.getLogger("djinn.role_persistence")
 
 
 class RolePersistenceCog(commands.Cog, name="RolePersistence"):

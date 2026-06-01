@@ -14,7 +14,7 @@ from typing import List, Optional
 
 import discord
 
-logger = logging.getLogger("youkai.tts")
+logger = logging.getLogger("djinn.tts")
 
 
 class TTSEngine:

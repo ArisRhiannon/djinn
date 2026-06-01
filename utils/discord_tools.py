@@ -59,7 +59,7 @@ from utils.tools._helpers import (
     _ts_to_date,
 )
 
-logger = logging.getLogger("youkai.tools")
+logger = logging.getLogger("djinn.tools")
 
 
 

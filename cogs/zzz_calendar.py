@@ -22,7 +22,7 @@ from discord.ext import commands, tasks
 from utils.zzz_calendar.data import load_calendar
 from utils.zzz_calendar.renderer import render_calendar
 
-logger = logging.getLogger("youkai.zzz_calendar")
+logger = logging.getLogger("djinn.zzz_calendar")
 
 CONFIG_PATH = Path(__file__).parent.parent / "utils" / "zzz_calendar" / "config.json"
 UPDATE_INTERVAL_MIN = 10

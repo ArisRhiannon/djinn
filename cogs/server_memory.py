@@ -20,7 +20,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-logger = logging.getLogger("youkai.server_memory")
+logger = logging.getLogger("djinn.server_memory")
 
 # ── BM25 minimal (misma impl que zzz_rag) ─────────────────────────────
 

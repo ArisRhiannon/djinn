@@ -17,7 +17,7 @@ import aiohttp
 import discord
 from bs4 import BeautifulSoup
 
-logger = logging.getLogger("youkai.mediaguard.resolver")
+logger = logging.getLogger("djinn.mediaguard.resolver")
 
 # ── Recognized image/GIF content types ──────────────────────────────────────
 IMAGE_CONTENT_TYPES: frozenset[str] = frozenset({

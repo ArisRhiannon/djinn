@@ -20,7 +20,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-logger = logging.getLogger("youkai.dashboard")
+logger = logging.getLogger("djinn.dashboard")
 
 OWNER_ID: int = 239550977638793217
 MAX_LOG_ENTRIES = 12

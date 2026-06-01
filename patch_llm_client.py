@@ -16,7 +16,7 @@ with open(INFILE, encoding="utf-8") as f:
 
 # ── 1. Agrega imports de os y pathlib ────────────────────────────────────────
 src = src.replace(
-    'from config import DjinnConfig\n\nlogger = logging.getLogger("youkai.llm_client")',
+    'from config import DjinnConfig\n\nlogger = logging.getLogger("djinn.llm_client")',
     'from config import DjinnConfig\nimport os\nimport pathlib\n\nlogger = logging.getLogger("djinn.llm_client")'
 )
 
@@ -526,7 +526,7 @@ src = src.replace(
 src = src.replace('"X-Title": "Youkai Agent"', '"X-Title": "Djinn Agent"')
 
 # ── 10. Limpia menciones sueltas de Youkai en comentarios/logs ───────────────
-src = src.replace('logger = logging.getLogger("youkai.', 'logger = logging.getLogger("djinn.')
+src = src.replace('logger = logging.getLogger("djinn.', 'logger = logging.getLogger("djinn.')
 src = src.replace('"youkai.', '"djinn.')
 # Kiro boost mention
 src = src.replace("Eres Youkai — los observas", "Eres el agente — los observas")

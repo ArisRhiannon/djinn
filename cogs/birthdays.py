@@ -15,7 +15,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-logger = logging.getLogger("youkai.birthdays")
+logger = logging.getLogger("djinn.birthdays")
 
 # CDMX = UTC-6 (sin horario de verano desde 2022 en México)
 CDMX_OFFSET = timedelta(hours=-6)

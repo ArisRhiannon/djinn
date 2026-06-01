@@ -14,7 +14,7 @@ from discord.ext import commands
 
 from utils.zzz_card_renderer import render_build_card
 
-logger = logging.getLogger("youkai.zzz_builds")
+logger = logging.getLogger("djinn.zzz_builds")
 API_BASE = "http://140.84.187.50:8000"
 
 

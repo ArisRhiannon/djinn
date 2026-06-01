@@ -17,7 +17,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-logger = logging.getLogger("youkai.zzz_rag")
+logger = logging.getLogger("djinn.zzz_rag")
 
 # ── BM25 minimal (inline, sin dependencia externa) ─────────────────────
 import math

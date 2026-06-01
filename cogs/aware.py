@@ -21,7 +21,7 @@ import numpy as np
 from google.genai import types
 from utils.discord_tools import ToolExecutor, TOOL_DECLARATIONS
 
-logger = logging.getLogger("youkai.aware")
+logger = logging.getLogger("djinn.aware")
 
 ARIS_ID = 239550977638793217
 WAIT_MESSAGES = (5, 7)  # rango aleatorio de mensajes antes de responder

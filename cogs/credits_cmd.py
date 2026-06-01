@@ -21,7 +21,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-logger = logging.getLogger("youkai.credits_cmd")
+logger = logging.getLogger("djinn.credits_cmd")
 
 # Owners que pueden usar el atajo (Aris, Cisart). Cualquier otro caso debería
 # usar `/banco entregar` con permiso `manage_guild`.

@@ -16,7 +16,7 @@ from dataclasses import dataclass
 
 from playwright.async_api import async_playwright
 
-logger = logging.getLogger("youkai.shop_renderer")
+logger = logging.getLogger("djinn.shop_renderer")
 
 ITEMS_PER_PAGE = 10
 

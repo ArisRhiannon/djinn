@@ -15,7 +15,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-logger = logging.getLogger("youkai.model_switcher")
+logger = logging.getLogger("djinn.model_switcher")
 
 OWNER_ID: int = 239550977638793217
 CONFIG_PATH: Path = Path("data/model_config.json")

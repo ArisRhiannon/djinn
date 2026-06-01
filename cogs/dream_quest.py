@@ -42,7 +42,7 @@ from utils.kadath_gamestate import (
     untrustworthy_filter,
 )
 
-logger = logging.getLogger("youkai.kadath")
+logger = logging.getLogger("djinn.kadath")
 
 # ── Paths anclados al módulo (sobreviven a cwd distintos) ────────────────────
 

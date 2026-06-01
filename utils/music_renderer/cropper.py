@@ -10,7 +10,7 @@ import numpy as np
 import smartcrop
 from PIL import Image
 
-logger = logging.getLogger("youkai.music_renderer.cropper")
+logger = logging.getLogger("djinn.music_renderer.cropper")
 
 # Load Haar cascade once (frontal face)
 _FACE_CASCADE = cv2.CascadeClassifier(

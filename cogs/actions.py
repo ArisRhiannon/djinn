@@ -12,7 +12,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands
 
-logger = logging.getLogger("youkai.actions")
+logger = logging.getLogger("djinn.actions")
 
 HEAL_GIFS = [
     "https://media.giphy.com/media/Vz58J8shFW6BvqnYTm/giphy.gif",      # Tsunade curación ninjutsu

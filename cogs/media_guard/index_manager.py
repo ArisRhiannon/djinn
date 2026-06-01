@@ -30,7 +30,7 @@ from .thresholds import (
     META_PATH,
 )
 
-logger = logging.getLogger("youkai.mediaguard.index")
+logger = logging.getLogger("djinn.mediaguard.index")
 
 
 class IndexManager:

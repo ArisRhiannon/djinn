@@ -18,7 +18,7 @@ from discord.ext import commands, tasks
 
 from utils.security import PermLevel, require_level
 
-logger = logging.getLogger("youkai.active_award")
+logger = logging.getLogger("djinn.active_award")
 
 # ── Configuraciones por Defecto (solicitadas por el usuario) ──────────────────
 DEFAULT_GUILD_ID = 1269877200488763472

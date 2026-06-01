@@ -24,7 +24,7 @@ from urllib.parse import quote
 
 import aiohttp
 
-logger = logging.getLogger("youkai.zzz_calendar.assets")
+logger = logging.getLogger("djinn.zzz_calendar.assets")
 
 API_BASE = "http://140.84.187.50:8000"
 CACHE_DIR = Path("data/zzz_calendar_cache")

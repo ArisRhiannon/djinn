@@ -20,7 +20,7 @@ from typing import Optional
 import numpy as np
 from PIL import Image
 
-logger = logging.getLogger("youkai.mediaguard.embedder")
+logger = logging.getLogger("djinn.mediaguard.embedder")
 
 # ImageNet normalization constants (MobileNetV3-Small expects these)
 IMAGENET_MEAN = np.array([0.485, 0.456, 0.406], dtype=np.float32)

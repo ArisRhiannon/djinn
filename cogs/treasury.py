@@ -26,7 +26,7 @@ import discord
 from discord import app_commands
 from discord.ext import commands, tasks
 
-logger = logging.getLogger("youkai.treasury")
+logger = logging.getLogger("djinn.treasury")
 
 # Paleta — turquesa para banco normal, ámbar para entregas, azul para depósitos,
 # rojo para crítico. Coherente con la del logger Y O U K A I.

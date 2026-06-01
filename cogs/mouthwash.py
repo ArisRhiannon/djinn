@@ -22,7 +22,7 @@ from discord.ext import commands
 from utils.curse_webhook import CurseWebhookManager
 from utils.mouth_wash_llm import MouthWashLLM
 
-logger = logging.getLogger("youkai.mouthwash")
+logger = logging.getLogger("djinn.mouthwash")
 
 
 # ── Cog ───────────────────────────────────────────────────────────────────────

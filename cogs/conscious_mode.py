@@ -20,7 +20,7 @@ from google.genai import types
 
 from utils.discord_tools import ToolExecutor, TOOL_DECLARATIONS
 
-logger = logging.getLogger("youkai.conscious")
+logger = logging.getLogger("djinn.conscious")
 
 # ── Config ────────────────────────────────────────────────────────────────────
 

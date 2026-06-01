@@ -28,7 +28,7 @@ from utils.loan_engine import (
     msg_moroso_subtitle, CONSECUTIVE_MISSES_TO_DEFAULT,
 )
 
-logger = logging.getLogger("youkai.loan_shark")
+logger = logging.getLogger("djinn.loan_shark")
 
 _COLOR_LOAN = 0x9B59B6
 _COLOR_MOROSO = 0xE63946
